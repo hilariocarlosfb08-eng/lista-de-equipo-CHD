@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lista de equipo — CHD</title>
+<script>window.__carga = [];</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+        onerror="window.__carga.push('cdnjs-xlsx')"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
+        onerror="window.__carga.push('jsdelivr-xlsx')"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"
+        onerror="window.__carga.push('jsdelivr-estilos')"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+        onerror="window.__carga.push('cdnjs-jspdf')"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"
+        onerror="window.__carga.push('cdnjs-autotable')"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#f4f2ee; --card:#ffffff; --line:#d9d5cd; --ink:#1d1e20; --muted:#6c6f76;
+    --accent:#c8501e; --accent-ink:#ffffff; --ok:#2f7d51; --warn:#9a6b12; --warn-bg:#fdf5e3;
+    --field:#ffffff;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#17181a; --card:#212328; --line:#33363d; --ink:#e8e6e1; --muted:#9a9da6;
+      --accent:#e8763f; --accent-ink:#17181a; --ok:#5fb37a; --warn:#d8b877; --warn-bg:#2a2418;
+      --field:#1a1c1f;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#17181a; --card:#212328; --line:#33363d; --ink:#e8e6e1; --muted:#9a9da6;
+    --accent:#e8763f; --accent-ink:#17181a; --ok:#5fb37a; --warn:#d8b877; --warn-bg:#2a2418;
+    --field:#1a1c1f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:15px;line-height:1.5}
+  .wrap{max-width:900px;margin:0 auto;padding:20px 16px 120px}
+  h1{font-family:"Barlow Condensed",system-ui,sans-serif;font-size:32px;letter-spacing:.04em;margin:0;line-height:1.05}
+  .sub{color:var(--muted);font-size:13px;margin-top:4px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:16px}
+  label{display:block;font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
+  input,select{width:100%;height:44px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--ink);font-family:inherit;font-size:15px}
+  input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .rows{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+  .row{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--card)}
+  .rowhead{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .num{width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .del{margin-left:auto;height:34px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--muted);font-family:inherit;font-size:13px;cursor:pointer}
+  .fields{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
+  .fields2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px}
+  @media (max-width:640px){ .fields,.fields2,.grid2{grid-template-columns:1fr} }
+  .btn{height:48px;padding:0 18px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+  .bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:12px 16px}
+  .barin{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:12px}
+  .count{flex-grow:1;font-size:13px;color:var(--muted)}
+  .alert{margin-top:12px;padding:10px 12px;border-radius:8px;background:var(--warn-bg);border:1px solid var(--warn);color:var(--ink);font-size:13px}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px}
+  .arq{display:flex;align-items:center;gap:8px;height:44px;font-size:14px;color:var(--ink)}
+  .arq input{width:18px;height:18px;flex-shrink:0}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  td,th{border:1px solid var(--line);padding:6px 8px;text-align:left}
+  th{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+  .scroll{overflow-x:auto}
+  .marca{display:flex;align-items:center;gap:14px}
+  .logo{width:54px;height:54px;border-radius:10px;background:var(--accent);color:var(--accent-ink);
+        font-family:"Barlow Condensed",sans-serif;font-size:25px;font-weight:700;letter-spacing:.06em;
+        display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .pie{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);
+       display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px}
+  .pie b{color:var(--ink);font-family:"Barlow Condensed",sans-serif;font-size:16px;letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div id="aviso" role="status" style="display:none;position:fixed;left:50%;transform:translateX(-50%);
+     bottom:92px;z-index:60;max-width:90%;background:var(--accent);color:var(--accent-ink);
+     padding:11px 18px;border-radius:10px;font-size:14px;text-align:center;
+     box-shadow:0 6px 20px rgba(0,0,0,.28)"></div>
+
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTit" style="display:none;position:fixed;
+     inset:0;z-index:80;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;max-width:380px;width:100%">
+    <div id="modalTit" style="font-family:'Barlow Condensed',sans-serif;font-size:22px;letter-spacing:.03em">REINICIAR LISTA</div>
+    <div style="color:var(--muted);font-size:14px;margin-top:8px;line-height:1.5">
+      Se borrar&aacute;n todos los jugadores, los datos del pedido y la foto.
+      Esta acci&oacute;n no se puede deshacer.
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="btn" id="modalNo" style="flex:1">Cancelar</button>
+      <button class="btn primary" id="modalSi" style="flex:1">S&iacute;, borrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="marca">
+    <div class="logo">CHD</div>
+    <div>
+      <h1>LISTA DE EQUIPO</h1>
+      <div class="sub">Llena los datos de cada jugador y descarga el archivo al final.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label for="equipo">Equipo o cliente</label>
+        <input id="equipo" placeholder="Ej. Rupay Inox">
+      </div>
+      <div>
+        <label for="contacto">Contacto (teléfono o correo)</label>
+        <input id="contacto" placeholder="Para consultas del pedido">
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:12px">
+      <div>
+        <label for="telaCamiseta">Tela de la camiseta</label>
+        <input id="telaCamiseta" list="telas" placeholder="Ej. WIN">
+      </div>
+      <div>
+        <label for="telaShort">Tela del short</label>
+        <input id="telaShort" list="telas" placeholder="Ej. TASLAN">
+      </div>
+    </div>
+    <datalist id="telas">
+      <option value="WIN"></option>
+      <option value="TASLAN"></option>
+      <option value="DRYFIT"></option>
+      <option value="MICROFIBRA"></option>
+      <option value="RIB"></option>
+    </datalist>
+    <div class="hint">El nombre del equipo se usa para identificar tu pedido. Puedes mezclar varón y dama, camisetas y conjuntos en la misma lista: cada jugador lleva sus propias opciones.</div>
+  </div>
+
+  <div class="card">
+    <label>Foto de referencia del dise&ntilde;o</label>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <label class="btn" style="display:inline-flex;align-items:center;margin:0">
+        Elegir foto
+        <input type="file" id="foto" accept="image/*" style="display:none">
+      </label>
+      <span id="fotoNombre" class="hint" style="margin:0">Ning&uacute;n archivo elegido</span>
+      <button class="btn" id="bajarFoto" style="margin-left:auto;display:none">Descargar foto</button>
+    </div>
+    <div id="fotoPrev" style="margin-top:12px"></div>
+    <div class="hint">Opcional. En el <b>PDF</b> la foto sale incrustada. Para Excel o CSV, desc&aacute;rgala aparte con el bot&oacute;n.</div>
+  </div>
+
+  <div class="rows" id="rows"></div>
+
+  <div id="avisos"></div>
+
+  <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn" id="add">+ Agregar jugador</button>
+    <button class="btn" id="add5">+ Agregar 5</button>
+    <button class="btn" id="reiniciar" style="margin-left:auto;color:var(--muted)">Reiniciar lista</button>
+  </div>
+
+  <div class="card">
+    <label>Resumen del pedido</label>
+    <div class="scroll"><table id="resumen"></table></div>
+  </div>
+
+  <div class="pie">
+    <b>CHD</b>
+    <span>Ropa deportiva personalizada</span>
+  </div>
+
+</div>
+
+<div class="bar">
+  <div class="barin">
+    <div class="count" id="count">0 jugadores</div>
+    <button class="btn" id="descargarCsv">CSV</button>
+    <button class="btn" id="descargarPdf">PDF</button>
+    <button class="btn primary" id="descargar">Descargar Excel</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var fotoArchivo = null;
+  var avisoTimer = null;
+  function mensaje(txt){
+    var el = document.getElementById("aviso");
+    el.textContent = txt;
+    el.style.display = "block";
+    if (avisoTimer) clearTimeout(avisoTimer);
+    avisoTimer = setTimeout(function(){ el.style.display = "none"; }, 4000);
+  }
+
+  var TALLAS = ["2","4","6","8","10","12","14","16","S","M","L","XL","XXL","XXXL","XXXXL"];
+  var rowsEl = document.getElementById("rows");
+  var datos = [];
+  var proximoId = 1;
+
+  function nuevaFila(){
+    return { id: proximoId++, nombre:"", talla:"M", numero:"", genero:"VARON",
+             prenda:"CAMISETA", manga:"CORTA", arquero:false };
+  }
+
+  function opciones(lista, valor){
+    return lista.map(function(v){
+      var sel = (v === valor) ? " selected" : "";
+      return "<option value=\"" + v + "\"" + sel + ">" + v + "</option>";
+    }).join("");
+  }
+
+  function pintar(){
+    rowsEl.innerHTML = "";
+    datos.forEach(function(d, i){
+      var div = document.createElement("div");
+      div.className = "row";
+      div.innerHTML =
+        "<div class='rowhead'><div class='num'>" + (i+1) + "</div>" +
+        "<div style='font-size:13px;color:var(--muted)'>Jugador</div>" +
+        "<button class='del' data-del='" + d.id + "'>Quitar</button></div>" +
+
+        "<div class='fields'>" +
+          "<div><label>Nombre para la camiseta</label>" +
+            "<input data-f='nombre' data-id='" + d.id + "' value=\"" + esc(d.nombre) + "\" maxlength='40' placeholder='Como debe salir impreso'></div>" +
+          "<div><label>Talla</label><select data-f='talla' data-id='" + d.id + "'>" + opciones(TALLAS, d.talla) + "</select></div>" +
+          "<div><label>Número</label><input data-f='numero' data-id='" + d.id + "' value=\"" + esc(d.numero) + "\" inputmode='numeric' maxlength='4' placeholder='hasta 4 dígitos'></div>" +
+        "</div>" +
+
+        "<div class='fields2'>" +
+          "<div><label>Género</label><select data-f='genero' data-id='" + d.id + "'>" + opciones(["VARON","DAMA"], d.genero) + "</select></div>" +
+          "<div><label>Prenda</label><select data-f='prenda' data-id='" + d.id + "'>" + opciones(["CAMISETA","CONJUNTO"], d.prenda) + "</select></div>" +
+          "<div><label>Manga</label><select data-f='manga' data-id='" + d.id + "'>" + opciones(["CORTA","LARGA"], d.manga) + "</select></div>" +
+        "</div>" +
+
+        "<div style='margin-top:10px'><label class='arq'><input type='checkbox' data-f='arquero' data-id='" + d.id + "'" +
+          (d.arquero ? " checked" : "") + "> Es arquero (lleva diseño distinto)</label></div>";
+      rowsEl.appendChild(div);
+    });
+    actualizarResumen();
+    guardar();
+  }
+
+  function esc(s){
+    return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+
+  function buscar(id){
+    for (var i=0;i<datos.length;i++){ if (datos[i].id === Number(id)) return datos[i]; }
+    return null;
+  }
+
+  rowsEl.addEventListener("input", function(e){
+    var f = e.target.getAttribute("data-f");
+    if (!f) return;
+    var d = buscar(e.target.getAttribute("data-id"));
+    if (!d) return;
+    if (f === "arquero"){ d.arquero = e.target.checked; }
+    else if (f === "numero"){ d.numero = e.target.value.replace(/[^0-9]/g,""); e.target.value = d.numero; }
+    else if (f === "nombre"){ d.nombre = e.target.value.toUpperCase(); e.target.value = d.nombre; }
+    else { d[f] = e.target.value; }
+    actualizarResumen();
+    guardar();
+  });
+
+  rowsEl.addEventListener("change", function(e){
+    if (e.target.getAttribute("data-f")) { actualizarResumen(); guardar(); }
+  });
+
+  rowsEl.addEventListener("click", function(e){
+    var id = e.target.getAttribute("data-del");
+    if (!id) return;
+    datos = datos.filter(function(d){ return d.id !== Number(id); });
+    if (datos.length === 0) datos.push(nuevaFila());
+    pintar();
+  });
+
+  document.getElementById("add").addEventListener("click", function(){
+    datos.push(nuevaFila()); pintar();
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+  document.getElementById("add5").addEventListener("click", function(){
+    for (var i=0;i<5;i++) datos.push(nuevaFila());
+    pintar();
+  });
+
+  function llenos(){
+    return datos.filter(function(d){ return d.nombre.trim() !== "" || d.numero !== ""; });
+  }
+
+  function actualizarResumen(){
+    var L = llenos();
+    document.getElementById("count").textContent =
+      L.length + (L.length === 1 ? " jugador" : " jugadores");
+
+    var mapa = {};
+    L.forEach(function(d){
+      var k = d.genero + "|" + d.prenda + "|" + d.talla;
+      mapa[k] = (mapa[k] || 0) + 1;
+    });
+
+    var claves = Object.keys(mapa).sort();
+    var html = "<tr><th>Género</th><th>Prenda</th><th>Talla</th><th>Cantidad</th></tr>";
+    if (claves.length === 0){
+      html += "<tr><td colspan='4' style='color:var(--muted)'>Aún no hay jugadores</td></tr>";
+    } else {
+      claves.forEach(function(k){
+        var p = k.split("|");
+        html += "<tr><td>" + p[0] + "</td><td>" + p[1] + "</td><td>" + p[2] + "</td><td>" + mapa[k] + "</td></tr>";
+      });
+    }
+    document.getElementById("resumen").innerHTML = html;
+
+    // Avisos
+    var av = [];
+    var vistos = {};
+    L.forEach(function(d){
+      if (d.numero === "") return;
+      var k = d.genero + "-" + d.numero;
+      if (vistos[k]) { if (av.indexOf(d.numero) === -1) av.push(d.numero); }
+      vistos[k] = true;
+    });
+    var sinNum = L.filter(function(d){ return d.numero === ""; }).length;
+    var sinNom = L.filter(function(d){ return d.nombre.trim() === ""; }).length;
+
+    var msgs = [];
+    if (av.length) msgs.push("Números repetidos: " + av.join(", ") + ". Revisa que sea a propósito.");
+    if (sinNum) msgs.push(sinNum + " jugador(es) sin número.");
+    if (sinNom) msgs.push(sinNom + " jugador(es) sin nombre.");
+
+    document.getElementById("avisos").innerHTML = msgs.length
+      ? "<div class='alert'>" + msgs.join("<br>") + "</div>" : "";
+  }
+
+  // ---- CSV con el formato que espera el taller ----
+  function campo(v){
+    var s = String(v == null ? "" : v);
+    return (s.indexOf(",") >= 0 || s.indexOf("\"") >= 0)
+      ? "\"" + s.replace(/"/g,"\"\"") + "\"" : s;
+  }
+
+  function armarCSV(){
+    var L = llenos();
+    var equipo = document.getElementById("equipo").value.trim();
+    var contacto = document.getElementById("contacto").value.trim();
+
+    var out = [];
+    out.push(campo("EQUIPO") + "," + campo(equipo));
+    out.push(campo("CONTACTO") + "," + campo(contacto));
+    out.push(campo("FECHA") + "," + campo(new Date().toLocaleDateString("es-PE")));
+    out.push(campo("TELA CAMISETA") + "," + campo(document.getElementById("telaCamiseta").value.trim()));
+    out.push(campo("TELA SHORT") + "," + campo(document.getElementById("telaShort").value.trim()));
+    out.push("");
+
+    var bloques = [
+      ["VARON","CAMISETA","CAMISETAS VARON"],
+      ["VARON","CONJUNTO","CONJUNTOS VARON"],
+      ["DAMA","CAMISETA","CAMISETAS DAMA"],
+      ["DAMA","CONJUNTO","CONJUNTOS DAMA"]
+    ];
+
+    bloques.forEach(function(b){
+      var grupo = L.filter(function(d){ return d.genero === b[0] && d.prenda === b[1]; });
+      if (grupo.length === 0) return;
+
+      out.push(campo(b[2]));
+      out.push("ITEM,NOMBRE,TALLA,NUMERO,OBSERVACION");
+
+      grupo.forEach(function(d, i){
+        var obs = [];
+        if (d.arquero) obs.push("ARQUERO");
+        obs.push("MANGA " + d.manga);
+        out.push([ (i+1), campo(d.nombre), campo(d.talla), campo(d.numero), campo(obs.join(" ")) ].join(","));
+      });
+      out.push("");
+    });
+
+    return out.join("\r\n");
+  }
+
+  function datosDelPedido(){
+    return {
+      equipo: document.getElementById("equipo").value.trim(),
+      contacto: document.getElementById("contacto").value.trim(),
+      telaCamiseta: document.getElementById("telaCamiseta").value.trim(),
+      telaShort: document.getElementById("telaShort").value.trim()
+    };
+  }
+
+  function validar(){
+    if (llenos().length === 0){ mensaje("Agrega al menos un jugador antes de descargar."); return false; }
+    if (!datosDelPedido().equipo){
+      mensaje("Escribe el nombre del equipo o cliente.");
+      document.getElementById("equipo").focus();
+      return false;
+    }
+    return true;
+  }
+
+  function nombreBase(){
+    var e = datosDelPedido().equipo.toLowerCase();
+    return "lista-" + e.replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  }
+
+  // ---- Excel con formato ----
+  var NARANJA = "C8501E", GRIS = "EFEDE9", LINEA = "B9B4AA";
+
+  function estiloTitulo(){
+    return { font:{bold:true, sz:16, color:{rgb:"FFFFFF"}},
+             fill:{fgColor:{rgb:NARANJA}},
+             alignment:{vertical:"center", horizontal:"left"} };
+  }
+  function estiloEtiqueta(){
+    return { font:{bold:true, sz:10, color:{rgb:"6C6F76"}},
+             alignment:{vertical:"center"} };
+  }
+  function estiloValor(){
+    return { font:{sz:11}, alignment:{vertical:"center"} };
+  }
+  function estiloSeccion(){
+    return { font:{bold:true, sz:12, color:{rgb:"FFFFFF"}},
+             fill:{fgColor:{rgb:"3A3D44"}},
+             alignment:{vertical:"center"} };
+  }
+  function estiloCabecera(){
+    return { font:{bold:true, sz:10},
+             fill:{fgColor:{rgb:GRIS}},
+             alignment:{vertical:"center", horizontal:"center"},
+             border:borde() };
+  }
+  function estiloCelda(centrado){
+    return { font:{sz:11},
+             alignment:{vertical:"center", horizontal: centrado ? "center" : "left"},
+             border:borde() };
+  }
+  function borde(){
+    var l = {style:"thin", color:{rgb:LINEA}};
+    return { top:l, bottom:l, left:l, right:l };
+  }
+
+  // Devuelve las filas y que papel cumple cada una, para darles formato
+  function armarHoja(){
+    var L = llenos();
+    var p = datosDelPedido();
+    var filas = [], roles = [];
+
+    function push(fila, rol){ filas.push(fila); roles.push(rol); }
+
+    push(["CHD  .  LISTA DE PEDIDO", "", "", "", ""], "titulo");
+    push([], "vacio");
+    push(["EQUIPO / CLIENTE", p.equipo], "info");
+    push(["CONTACTO", p.contacto], "info");
+    push(["FECHA", new Date().toLocaleDateString("es-PE")], "info");
+    push(["TELA CAMISETA", p.telaCamiseta], "info");
+    push(["TELA SHORT", p.telaShort], "info");
+    push(["TOTAL DE PRENDAS", L.length], "info");
+    if (fotoArchivo) push(["FOTO DE REFERENCIA", fotoArchivo.name + "  (archivo aparte)"], "info");
+    push([], "vacio");
+
+    var bloques = [
+      ["VARON","CAMISETA","CAMISETAS VARON"],
+      ["VARON","CONJUNTO","CONJUNTOS VARON"],
+      ["DAMA","CAMISETA","CAMISETAS DAMA"],
+      ["DAMA","CONJUNTO","CONJUNTOS DAMA"]
+    ];
+
+    bloques.forEach(function(b){
+      var grupo = L.filter(function(d){ return d.genero === b[0] && d.prenda === b[1]; });
+      if (grupo.length === 0) return;
+
+      push([b[2] + "   (" + grupo.length + ")", "", "", "", ""], "seccion");
+      push(["ITEM","NOMBRE","TALLA","NUMERO","OBSERVACION"], "cabecera");
+      grupo.forEach(function(d, i){
+        var obs = [];
+        if (d.arquero) obs.push("ARQUERO");
+        obs.push("MANGA " + d.manga);
+        push([ i+1, d.nombre, d.talla, d.numero, obs.join(" ") ], "dato");
+      });
+      push([], "vacio");
+    });
+
+    var mapa = {};
+    L.forEach(function(d){
+      var k = d.genero + " " + d.prenda + " " + d.talla;
+      mapa[k] = (mapa[k] || 0) + 1;
+    });
+    push(["RESUMEN POR TALLA", "", "", "", ""], "seccion");
+    push(["GENERO / PRENDA / TALLA","CANTIDAD","","",""], "cabecera");
+    Object.keys(mapa).sort().forEach(function(k){ push([k, mapa[k], "", "", ""], "dato"); });
+
+    return { filas: filas, roles: roles };
+  }
+
+  function darFormato(hoja, roles){
+    var merges = [];
+
+    roles.forEach(function(rol, r){
+      for (var c = 0; c < 5; c++){
+        var ref = XLSX.utils.encode_cell({ r: r, c: c });
+        if (!hoja[ref]){
+          if (rol === "titulo" || rol === "seccion") hoja[ref] = { t: "s", v: "" };
+          else continue;
+        }
+        if (rol === "titulo") hoja[ref].s = estiloTitulo();
+        else if (rol === "seccion") hoja[ref].s = estiloSeccion();
+        else if (rol === "cabecera") hoja[ref].s = estiloCabecera();
+        else if (rol === "dato") hoja[ref].s = estiloCelda(c === 0 || c === 2 || c === 3);
+        else if (rol === "info") hoja[ref].s = (c === 0) ? estiloEtiqueta() : estiloValor();
+      }
+      if (rol === "titulo" || rol === "seccion"){
+        merges.push({ s:{r:r, c:0}, e:{r:r, c:4} });
+      }
+    });
+
+    hoja["!merges"] = merges;
+    hoja["!cols"] = [{wch:8},{wch:36},{wch:10},{wch:11},{wch:28}];
+    hoja["!rows"] = roles.map(function(rol){
+      if (rol === "titulo") return { hpt: 30 };
+      if (rol === "seccion") return { hpt: 22 };
+      return { hpt: 18 };
+    });
+  }
+
+  async function ofrecer(filename, data){
+    // Dentro de Claude se usa su sistema de descargas; en cualquier otro
+    // sitio (GitHub Pages, archivo local) se usa la descarga normal del navegador.
+    var dl = null;
+    try {
+      if (window.claude && typeof window.claude.use === "function"){
+        dl = await window.claude.use("downloads");
+      }
+    } catch (e) { dl = null; }
+
+    if (dl){
+      try {
+        await dl.save({ filename: filename, data: data });
+      } catch (err){
+        if (err && err.code === "declined") return;
+        mensaje("No se pudo guardar el archivo. " +
+              "Codigo: " + ((err && err.code) ? err.code : "desconocido"));
+      }
+      return;
+    }
+
+    try {
+      var blob = (data instanceof Blob) ? data
+               : new Blob([data], { type: "text/csv;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+    } catch (e){
+      mensaje("No se pudo descargar el archivo.");
+    }
+  }
+
+  document.getElementById("descargar").addEventListener("click", async function(){
+    if (!validar()) return;
+
+    if (typeof XLSX === "undefined"){
+      mensaje("No se pudo cargar el generador de Excel. Usa el boton CSV por ahora.");
+      return;
+    }
+
+    var buf;
+    try {
+      var h = armarHoja();
+      var hoja = XLSX.utils.aoa_to_sheet(h.filas);
+      darFormato(hoja, h.roles);
+
+      var libro = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(libro, hoja, "Pedido");
+
+      buf = XLSX.write(libro, { bookType:"xlsx", type:"array" });
+    } catch (e){
+      mensaje("No se pudo armar el Excel. " + (e && e.message ? e.message : e));
+      return;
+    }
+
+    await ofrecer(nombreBase() + ".xlsx", new Blob([buf]));
+  });
+
+  document.getElementById("descargarCsv").addEventListener("click", async function(){
+    if (!validar()) return;
+    await ofrecer(nombreBase() + ".csv", "\ufeff" + armarCSV());
+  });
+
+  // ---- PDF para imprimir, con la foto incluida ----
+  function leerComoDataURL(file){
+    return new Promise(function(res, rej){
+      var fr = new FileReader();
+      fr.onload = function(){ res(fr.result); };
+      fr.onerror = function(){ rej(new Error("no se pudo leer la foto")); };
+      fr.readAsDataURL(file);
+    });
+  }
+
+  function medirImagen(dataUrl){
+    return new Promise(function(res){
+      var img = new Image();
+      img.onload = function(){ res({ w: img.naturalWidth, h: img.naturalHeight }); };
+      img.onerror = function(){ res(null); };
+      img.src = dataUrl;
+    });
+  }
+
+  document.getElementById("descargarPdf").addEventListener("click", async function(){
+    if (!validar()) return;
+
+    if (!window.jspdf || !window.jspdf.jsPDF){
+      mensaje("No se pudo cargar el generador de PDF. Usa Excel o CSV.");
+      return;
+    }
+
+    var doc;
+    try {
+      var jsPDF = window.jspdf.jsPDF;
+      doc = new jsPDF({ unit: "mm", format: "a4" });
+
+      var L = llenos();
+      var p = datosDelPedido();
+      var M = 11;                      // margen
+      var ancho = doc.internal.pageSize.getWidth();
+      var y = 0;
+
+      // Franja de marca, compacta
+      doc.setFillColor(200, 80, 30);
+      doc.rect(0, 0, ancho, 14, "F");
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.text("CHD", M, 9.5);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.text("LISTA DE PEDIDO", M + 15, 9.5);
+      doc.setFontSize(8);
+      doc.text(new Date().toLocaleDateString("es-PE"), ancho - M, 9.5, { align: "right" });
+      y = 20;
+
+      // Foto de referencia, arriba a la derecha
+      var anchoTexto = ancho - 2 * M;
+      var fotoAbajo = y;
+      if (fotoArchivo){
+        var dataUrl = await leerComoDataURL(fotoArchivo);
+        var dim = await medirImagen(dataUrl);
+        if (dim && dim.w > 0){
+          var maxW = 62, maxH = 50;
+          var esc = Math.min(maxW / dim.w, maxH / dim.h);
+          var w = dim.w * esc, h = dim.h * esc;
+          var tipo = (fotoArchivo.type.indexOf("png") >= 0) ? "PNG" : "JPEG";
+          doc.addImage(dataUrl, tipo, ancho - M - w, y, w, h);
+          doc.setDrawColor(190, 190, 190);
+          doc.rect(ancho - M - w, y, w, h);
+          anchoTexto = ancho - 2 * M - w - 6;
+          fotoAbajo = y + h;
+        }
+      }
+
+      // Datos del pedido en dos columnas
+      doc.setFontSize(8);
+      var info = [
+        ["Equipo", p.equipo],
+        ["Contacto", p.contacto],
+        ["Tela camiseta", p.telaCamiseta],
+        ["Tela short", p.telaShort],
+        ["Total prendas", String(L.length)]
+      ];
+      var col2 = M + anchoTexto / 2;
+      info.forEach(function(fila, i){
+        var x = (i < 3) ? M : col2;
+        var fy = y + 4 + ((i < 3 ? i : i - 3) * 4.6);
+        doc.setTextColor(130, 130, 130);
+        doc.text(fila[0], x, fy);
+        doc.setTextColor(30, 30, 30);
+        doc.text(String(fila[1] || "-"), x + 24, fy);
+      });
+      y += 4 + 3 * 4.6 + 4;
+      if (fotoAbajo + 6 > y) y = fotoAbajo + 6;   // la tabla nunca pisa la foto
+      if (fotoArchivo && y < 72) y = 72;
+
+      function cabeceraBloque(titulo, cols){
+        return [
+          [{ content: titulo, colSpan: cols,
+             styles: { fillColor: [58,61,68], textColor: [255,255,255],
+                       fontStyle: "bold", fontSize: 8, halign: "left", cellPadding: 1.4 } }],
+          cols === 5
+            ? ["ITEM","NOMBRE","TALLA","N","OBSERVACION"]
+            : ["GENERO / PRENDA / TALLA","CANT."]
+        ];
+      }
+
+      var estilos = {
+        styles: { fontSize: 7.5, cellPadding: 1.1, lineColor: [190,185,175], lineWidth: 0.15 },
+        headStyles: { fillColor: [239,237,233], textColor: [40,40,40], fontStyle: "bold", fontSize: 7.5 },
+        theme: "grid",
+        margin: { left: M, right: M }
+      };
+
+      var bloques = [
+        ["VARON","CAMISETA","CAMISETAS VARON"],
+        ["VARON","CONJUNTO","CONJUNTOS VARON"],
+        ["DAMA","CAMISETA","CAMISETAS DAMA"],
+        ["DAMA","CONJUNTO","CONJUNTOS DAMA"]
+      ];
+
+      bloques.forEach(function(b){
+        var grupo = L.filter(function(d){ return d.genero === b[0] && d.prenda === b[1]; });
+        if (grupo.length === 0) return;
+
+        var filas = grupo.map(function(d, i){
+          var obs = [];
+          if (d.arquero) obs.push("ARQUERO");
+          obs.push(d.manga);
+          return [ i+1, d.nombre, d.talla, d.numero, obs.join(" ") ];
+        });
+
+        doc.autoTable(Object.assign({}, estilos, {
+          startY: y,
+          head: cabeceraBloque(b[2] + "   (" + grupo.length + ")", 5),
+          body: filas,
+          columnStyles: {
+            0: { cellWidth: 10, halign: "center" },
+            2: { cellWidth: 14, halign: "center" },
+            3: { cellWidth: 14, halign: "center" },
+            4: { cellWidth: 30 }
+          }
+        }));
+        y = doc.lastAutoTable.finalY + 3;
+      });
+
+      // Resumen por talla
+      var mapa = {};
+      L.forEach(function(d){
+        var k = d.genero + " " + d.prenda + " " + d.talla;
+        mapa[k] = (mapa[k] || 0) + 1;
+      });
+      var resumen = Object.keys(mapa).sort().map(function(k){ return [k, mapa[k]]; });
+
+      doc.autoTable(Object.assign({}, estilos, {
+        startY: y,
+        head: cabeceraBloque("RESUMEN POR TALLA", 2),
+        body: resumen,
+        tableWidth: 85,
+        columnStyles: { 1: { cellWidth: 18, halign: "center" } }
+      }));
+
+    } catch (e){
+      mensaje("No se pudo armar el PDF. " + (e && e.message ? e.message : e));
+      return;
+    }
+
+    await ofrecer(nombreBase() + ".pdf", doc.output("blob"));
+  });
+
+  // ---- Foto de referencia ----
+  document.getElementById("foto").addEventListener("change", function(e){
+    var f = e.target.files && e.target.files[0];
+    if (!f) return;
+    fotoArchivo = f;
+    document.getElementById("fotoNombre").textContent = f.name;
+
+    var url = URL.createObjectURL(f);
+    document.getElementById("fotoPrev").innerHTML =
+      "<img src='" + url + "' alt='Referencia del diseño' " +
+      "style='max-width:100%;max-height:260px;border-radius:8px;border:1px solid var(--line)'>";
+    document.getElementById("bajarFoto").style.display = "inline-flex";
+  });
+
+  document.getElementById("bajarFoto").addEventListener("click", function(){
+    if (!validar()) return;
+    guardarFotoSiHay();
+  });
+
+  async function guardarFotoSiHay(){
+    if (!fotoArchivo) return;
+    var ext = (fotoArchivo.name.split(".").pop() || "jpg").toLowerCase();
+    if (["png","jpg","jpeg","webp","gif"].indexOf(ext) === -1) ext = "jpg";
+    await ofrecer(nombreBase() + "-referencia." + ext, fotoArchivo);
+  }
+
+  // ---- Reiniciar la lista ----
+  var modal = document.getElementById("modal");
+
+  function abrirModal(){ modal.style.display = "flex"; }
+  function cerrarModal(){ modal.style.display = "none"; }
+
+  document.getElementById("reiniciar").addEventListener("click", abrirModal);
+  document.getElementById("modalNo").addEventListener("click", cerrarModal);
+  modal.addEventListener("click", function(e){ if (e.target === modal) cerrarModal(); });
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape" && modal.style.display === "flex") cerrarModal();
+  });
+
+  document.getElementById("modalSi").addEventListener("click", function(){
+    cerrarModal();
+
+    datos = [];
+    proximoId = 1;
+    for (var i = 0; i < 3; i++) datos.push(nuevaFila());
+
+    ["equipo","contacto","telaCamiseta","telaShort"].forEach(function(id){
+      document.getElementById(id).value = "";
+    });
+
+    fotoArchivo = null;
+    document.getElementById("foto").value = "";
+    document.getElementById("fotoNombre").textContent = "Ningun archivo elegido";
+    document.getElementById("fotoPrev").innerHTML = "";
+    document.getElementById("bajarFoto").style.display = "none";
+
+    try { localStorage.removeItem("chd_lista"); } catch (e) { }
+
+    pintar();
+    mensaje("Lista reiniciada.");
+  });
+
+  // ---- Borrador en el navegador de quien llena ----
+  function guardar(){
+    try {
+      localStorage.setItem("chd_lista", JSON.stringify({
+        equipo: document.getElementById("equipo").value,
+        contacto: document.getElementById("contacto").value,
+        telaCamiseta: document.getElementById("telaCamiseta").value,
+        telaShort: document.getElementById("telaShort").value,
+        datos: datos
+      }));
+    } catch (e) { /* sin borrador, no pasa nada */ }
+  }
+
+  function cargar(){
+    try {
+      var raw = localStorage.getItem("chd_lista");
+      if (!raw) return false;
+      var o = JSON.parse(raw);
+      if (!o || !Array.isArray(o.datos) || o.datos.length === 0) return false;
+      document.getElementById("equipo").value = o.equipo || "";
+      document.getElementById("contacto").value = o.contacto || "";
+      document.getElementById("telaCamiseta").value = o.telaCamiseta || "";
+      document.getElementById("telaShort").value = o.telaShort || "";
+      datos = o.datos;
+      datos.forEach(function(d){ if (d.id >= proximoId) proximoId = d.id + 1; });
+      return true;
+    } catch (e) { return false; }
+  }
+
+  ["equipo","contacto","telaCamiseta","telaShort"].forEach(function(id){
+    document.getElementById(id).addEventListener("input", guardar);
+  });
+
+  if (!cargar()){
+    for (var i=0;i<3;i++) datos.push(nuevaFila());
+  }
+  pintar();
+})();
+</script>
+</body>
+</html>
