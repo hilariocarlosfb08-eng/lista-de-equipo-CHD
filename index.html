@@ -51,7 +51,9 @@
   .del{margin-left:auto;height:34px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--muted);font-family:inherit;font-size:13px;cursor:pointer}
   .fields{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
   .fields2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px}
-  @media (max-width:640px){ .fields,.fields2,.grid2{grid-template-columns:1fr} }
+  .fields2.cuatro{grid-template-columns:1fr 1fr 1fr 1fr}
+  .fields2.cinco{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
+  @media (max-width:640px){ .fields,.fields2,.grid2,.fields2.cuatro,.fields2.cinco{grid-template-columns:1fr} }
   .btn{height:48px;padding:0 18px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer}
   .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
   .bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:12px 16px}
@@ -69,9 +71,69 @@
   .logo{width:54px;height:54px;border-radius:10px;background:var(--accent);color:var(--accent-ink);
         font-family:"Barlow Condensed",sans-serif;font-size:25px;font-weight:700;letter-spacing:.06em;
         display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .modo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .modo button{height:auto;min-height:48px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--field);color:var(--ink);font-family:inherit;font-size:14px;text-align:left;cursor:pointer;line-height:1.3}
+  .modo button b{display:block;font-size:15px}
+  .modo button span{color:var(--muted);font-size:12px}
+  .modo button.on{border:2px solid var(--accent);background:var(--card)}
+  @media (max-width:640px){ .modo{grid-template-columns:1fr} }
   .pie{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);
        display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px}
   .pie b{color:var(--ink);font-family:"Barlow Condensed",sans-serif;font-size:16px;letter-spacing:.08em}
+  /* ---- v2: grupos con tabla rapida (tambien para celular) ---- */
+  .grupo{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:14px}
+  .ghead{display:flex;align-items:center;gap:8px}
+  .gtit{flex:1;font-family:"Barlow Condensed",system-ui,sans-serif;font-size:21px;letter-spacing:.02em;line-height:1.15}
+  .gcount{display:inline-block;min-width:24px;text-align:center;background:var(--accent);color:var(--accent-ink);
+          border-radius:999px;padding:0 8px;font-family:"IBM Plex Sans",sans-serif;font-size:13px;font-weight:600;vertical-align:3px}
+  .gdel{height:34px;min-width:34px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:transparent;
+        color:var(--muted);font-family:inherit;font-size:13px;cursor:pointer}
+  .segs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .seg button{height:36px;padding:0 12px;border:0;background:var(--field);color:var(--ink);font-family:inherit;
+              font-size:14px;cursor:pointer}
+  .seg button+button{border-left:1px solid var(--line)}
+  .seg button.on{background:var(--accent);color:var(--accent-ink);font-weight:600}
+  .fila{display:grid;grid-template-columns:18px minmax(0,1fr) 56px 74px 38px;gap:6px;align-items:center;margin-top:6px}
+  .fila.cant{grid-template-columns:22px minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) 38px}
+  .fila.cab{margin-top:12px;font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  .fila input{height:42px;padding:0 9px;font-size:16px}
+  .fila input.nom,.fila input.talla{text-transform:uppercase}
+  .fila input.talla{text-align:center;padding:0 4px}
+  .fila input.talla::-webkit-calendar-picker-indicator{display:none !important;opacity:0}
+  .fila input[data-c="numero"]{padding:0 4px}
+  .fila input[data-c="numero"],.fila input[data-c="cantidad"]{text-align:center}
+  .fila input.bad{border-color:#d33d2f;background:rgba(211,61,47,.08)}
+  .fila.rev input{background:var(--warn-bg)}
+  .idx{font-size:12px;color:var(--muted);text-align:right}
+  .mas{height:42px;width:38px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--muted);
+       font-size:18px;line-height:1;cursor:pointer;padding:0}
+  .tags{grid-column:2 / -1;display:flex;gap:6px;flex-wrap:wrap;margin-top:-2px}
+  .tags span{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--accent);border:1px solid var(--accent);
+             border-radius:999px;padding:0 8px}
+  .panel{grid-column:2 / -1;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px;border-radius:8px;
+         background:var(--bg);border:1px solid var(--line)}
+  .panel .chk{display:flex;align-items:center;gap:8px;margin:0;font-size:14px;color:var(--ink);text-transform:none;letter-spacing:0}
+  .panel .chk input{width:20px;height:20px}
+  .pshort{display:flex;align-items:center;gap:8px;font-size:14px}
+  .pshort select{width:auto;height:38px}
+  .mini{height:38px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);
+        font-family:inherit;font-size:14px;cursor:pointer}
+  .addrow{margin-top:10px;width:100%;height:44px;border:1px dashed var(--line);border-radius:9px;background:transparent;
+          color:var(--muted);font-family:inherit;font-size:15px;cursor:pointer}
+  .acciones{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+  textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--ink);
+           font-family:inherit;font-size:16px;line-height:1.4;resize:vertical}
+  @media (max-width:520px){
+    .wrap{padding-bottom:150px}
+    .barin{flex-wrap:wrap;gap:8px}
+    .count{flex-basis:100%;text-align:center}
+    .bar .btn{flex:1;height:44px;padding:0 8px;font-size:14px}
+    #aviso{bottom:126px !important}
+    .acciones .btn{flex:1}
+    .gtit{font-size:19px}
+    .seg button{padding:0 10px}
+  }
 </style>
 </head>
 <body>
@@ -95,13 +157,30 @@
   </div>
 </div>
 
+<div id="modalPegar" role="dialog" aria-modal="true" aria-labelledby="pegarTit" style="display:none;position:fixed;
+     inset:0;z-index:80;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;max-width:460px;width:100%">
+    <div id="pegarTit" style="font-family:'Barlow Condensed',sans-serif;font-size:22px;letter-spacing:.03em">PEGAR LISTA</div>
+    <div class="hint" style="margin-top:4px">Una l&iacute;nea por jugador: <b>nombre, n&uacute;mero y talla</b>.
+      Sirve lo que copies de WhatsApp o notas. De un Excel, copia las columnas <b>con su fila de t&iacute;tulos</b>
+      (o usa <b>Subir Excel</b>). Si dice ARQUERO, se marca solo.</div>
+    <textarea id="pegarTxt" rows="8" style="margin-top:10px" placeholder="JUAN PEREZ 10 M&#10;PEDRO 7 L&#10;LUIS 1 S ARQUERO"></textarea>
+    <label for="pegarGrupo" style="margin-top:10px">Agregar al grupo</label>
+    <select id="pegarGrupo"></select>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn" id="pegarNo" style="flex:1">Cancelar</button>
+      <button class="btn primary" id="pegarSi" style="flex:1">Agregar</button>
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
 
   <div class="marca">
     <div class="logo">CHD</div>
     <div>
       <h1>LISTA DE EQUIPO</h1>
-      <div class="sub">Llena los datos de cada jugador y descarga el archivo al final.</div>
+      <div class="sub">Llena la lista por grupos y descarga el archivo al final.</div>
     </div>
   </div>
 
@@ -133,7 +212,7 @@
       <option value="MICROFIBRA"></option>
       <option value="RIB"></option>
     </datalist>
-    <div class="hint">El nombre del equipo se usa para identificar tu pedido. Puedes mezclar varón y dama, camisetas y conjuntos en la misma lista: cada jugador lleva sus propias opciones.</div>
+    <div class="hint">El nombre del equipo se usa para identificar tu pedido.</div>
   </div>
 
   <div class="card">
@@ -150,15 +229,37 @@
     <div class="hint">Opcional. En el <b>PDF</b> la foto sale incrustada. Para Excel o CSV, desc&aacute;rgala aparte con el bot&oacute;n.</div>
   </div>
 
-  <div class="rows" id="rows"></div>
+  <div class="card">
+    <label>Tipo de pedido</label>
+    <div class="modo">
+      <button type="button" id="modoNombres"><b>Con nombres y números</b><span>Una fila por jugador</span></button>
+      <button type="button" id="modoCantidades"><b>Solo tallas y cantidades</b><span>Sin nombres: ej. 10 talla M, 8 talla L (con o sin número)</span></button>
+    </div>
+  </div>
+
+  <div class="hint" style="margin-top:14px">
+    Arriba de cada grupo eliges <b>una sola vez</b> var&oacute;n o dama, camiseta o conjunto y la manga.
+    Debajo escribe nombre, n&uacute;mero y talla (<b>m</b>, <b>xl</b>, <b>10</b>...) y pulsa <b>Enter</b> para pasar
+    al siguiente. Con <b>&#8943;</b> marcas arquero o un short de otra talla.
+  </div>
+
+  <div id="grupos"></div>
 
   <div id="avisos"></div>
 
-  <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-    <button class="btn" id="add">+ Agregar jugador</button>
-    <button class="btn" id="add5">+ Agregar 5</button>
-    <button class="btn" id="reiniciar" style="margin-left:auto;color:var(--muted)">Reiniciar lista</button>
+  <div class="acciones">
+    <button class="btn" id="addGrupo">+ Grupo</button>
+    <button class="btn" id="pegar">Pegar lista</button>
+    <button class="btn" id="subirExcel">Subir Excel</button>
+    <input type="file" id="archivoExcel" accept=".xlsx,.xls,.csv" style="display:none">
+    <button class="btn" id="reiniciar" style="margin-left:auto;color:var(--muted)">Reiniciar</button>
   </div>
+  <datalist id="tallasLista">
+    <option value="2"></option><option value="4"></option><option value="6"></option><option value="8"></option>
+    <option value="10"></option><option value="12"></option><option value="14"></option><option value="16"></option>
+    <option value="S"></option><option value="M"></option><option value="L"></option><option value="XL"></option>
+    <option value="XXL"></option><option value="XXXL"></option><option value="XXXXL"></option>
+  </datalist>
 
   <div class="card">
     <label>Resumen del pedido</label>
@@ -181,6 +282,7 @@
   </div>
 </div>
 
+
 <script>
 (function(){
   "use strict";
@@ -192,128 +294,666 @@
     el.textContent = txt;
     el.style.display = "block";
     if (avisoTimer) clearTimeout(avisoTimer);
-    avisoTimer = setTimeout(function(){ el.style.display = "none"; }, 4000);
+    avisoTimer = setTimeout(function(){ el.style.display = "none"; }, 4500);
   }
 
   var TALLAS = ["2","4","6","8","10","12","14","16","S","M","L","XL","XXL","XXXL","XXXXL"];
-  var rowsEl = document.getElementById("rows");
-  var datos = [];
+  var LETRAS = ["S","M","L","XL","XXL","XXXL","XXXXL"];
+  var gruposEl = document.getElementById("grupos");
+  var grupos = [];
   var proximoId = 1;
+  var modo = "nombres";          // "nombres" o "cantidades"
 
+  function nuevoGrupo(base){
+    return { id: proximoId++,
+             genero: base ? base.genero : "VARON",
+             prenda: base ? base.prenda : "CAMISETA",
+             manga:  base ? base.manga  : "CORTA",
+             abajo:  base ? base.abajo  : "SHORT",
+             filas: [] };
+  }
   function nuevaFila(){
-    return { id: proximoId++, nombre:"", talla:"M", numero:"", genero:"VARON",
-             prenda:"CAMISETA", manga:"CORTA", arquero:false };
+    return { id: proximoId++, nombre:"", numero:"", talla:"", cantidad:"", tallaShort:"",
+             arquero:false, abierta:false, rev:false };
+  }
+  function grupoConFilas(base, n){
+    var g = nuevoGrupo(base);
+    for (var i = 0; i < n; i++) g.filas.push(nuevaFila());
+    return g;
   }
 
-  function opciones(lista, valor){
-    return lista.map(function(v){
-      var sel = (v === valor) ? " selected" : "";
-      return "<option value=\"" + v + "\"" + sel + ">" + v + "</option>";
-    }).join("");
+  // "m" -> M, "2xl" -> XXL, "talla 10" -> 10
+  function normTalla(t){
+    var s = String(t == null ? "" : t).toUpperCase().replace(/\s+/g, "");
+    s = s.replace(/^TALLA[:.\-]?/, "").replace(/^T[:.\-]/, "");
+    if (s === "2XL") s = "XXL"; else if (s === "3XL") s = "XXXL"; else if (s === "4XL") s = "XXXXL";
+    return s;
   }
+  function tallaOk(t){ return TALLAS.indexOf(t) >= 0; }
 
-  function pintar(){
-    rowsEl.innerHTML = "";
-    datos.forEach(function(d, i){
-      var div = document.createElement("div");
-      div.className = "row";
-      div.innerHTML =
-        "<div class='rowhead'><div class='num'>" + (i+1) + "</div>" +
-        "<div style='font-size:13px;color:var(--muted)'>Jugador</div>" +
-        "<button class='del' data-del='" + d.id + "'>Quitar</button></div>" +
-
-        "<div class='fields'>" +
-          "<div><label>Nombre para la camiseta</label>" +
-            "<input data-f='nombre' data-id='" + d.id + "' value=\"" + esc(d.nombre) + "\" maxlength='40' placeholder='Como debe salir impreso'></div>" +
-          "<div><label>Talla</label><select data-f='talla' data-id='" + d.id + "'>" + opciones(TALLAS, d.talla) + "</select></div>" +
-          "<div><label>Número</label><input data-f='numero' data-id='" + d.id + "' value=\"" + esc(d.numero) + "\" inputmode='numeric' maxlength='4' placeholder='hasta 4 dígitos'></div>" +
-        "</div>" +
-
-        "<div class='fields2'>" +
-          "<div><label>Género</label><select data-f='genero' data-id='" + d.id + "'>" + opciones(["VARON","DAMA"], d.genero) + "</select></div>" +
-          "<div><label>Prenda</label><select data-f='prenda' data-id='" + d.id + "'>" + opciones(["CAMISETA","CONJUNTO"], d.prenda) + "</select></div>" +
-          "<div><label>Manga</label><select data-f='manga' data-id='" + d.id + "'>" + opciones(["CORTA","LARGA"], d.manga) + "</select></div>" +
-        "</div>" +
-
-        "<div style='margin-top:10px'><label class='arq'><input type='checkbox' data-f='arquero' data-id='" + d.id + "'" +
-          (d.arquero ? " checked" : "") + "> Es arquero (lleva diseño distinto)</label></div>";
-      rowsEl.appendChild(div);
-    });
-    actualizarResumen();
-    guardar();
+  // Varon (corte de hombre) que lleva FALDA abajo, en vez de short
+  function esFaldaV(d){
+    return d.prenda === "CONJUNTO" && d.genero === "VARON" && d.abajo === "FALDA";
+  }
+  // Talla de lo de abajo: la elegida, o la del polo
+  function tallaAbajo(d){ return d.tallaShort || d.talla; }
+  // Talla del short si va en otra talla que el polo (solo en conjuntos); "" = la misma
+  function shortAparte(d){
+    if (esFaldaV(d)) return "";
+    return (d.prenda === "CONJUNTO" && d.tallaShort && d.tallaShort !== d.talla) ? d.tallaShort : "";
+  }
+  // Talla para el resumen: "M", "M / SHORT S" o "M / FALDA 10"
+  function tallaResumen(d){
+    var t = d.talla || "?";
+    if (esFaldaV(d)) return t + " / FALDA " + (tallaAbajo(d) || "?");
+    var sa = shortAparte(d);
+    return sa ? t + " / SHORT " + sa : t;
+  }
+  // Columnas que se agregan al bloque: TALLA SHORT (si alguno cambio la
+  // talla del short) y TALLA FALDA (si alguno de varon lleva falda)
+  function extras(grupo){
+    var ex = [];
+    if (grupo.some(function(d){ return shortAparte(d) !== ""; }))
+      ex.push({ t: "TALLA SHORT", p: "SHORT",
+                v: function(d){ return esFaldaV(d) ? "" : (shortAparte(d) || d.talla); } });
+    if (grupo.some(esFaldaV))
+      ex.push({ t: "TALLA FALDA", p: "FALDA",
+                v: function(d){ return esFaldaV(d) ? tallaAbajo(d) : ""; } });
+    return ex;
+  }
+  function opcionesShort(valor){
+    return "<option value=\"\"" + (valor ? "" : " selected") + ">Igual al polo</option>" +
+      TALLAS.map(function(v){
+        return "<option value=\"" + v + "\"" + (v === valor ? " selected" : "") + ">" + v + "</option>";
+      }).join("");
   }
 
   function esc(s){
-    return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")
+                    .replace(/</g,"&lt;").replace(/>/g,"&gt;");
   }
 
-  function buscar(id){
-    for (var i=0;i<datos.length;i++){ if (datos[i].id === Number(id)) return datos[i]; }
+  // ---- De grupos a la lista de siempre (una fila por prenda/jugador) ----
+  function aPlano(g, f){
+    return { nombre: f.nombre, talla: f.talla, numero: f.numero, genero: g.genero,
+             prenda: g.prenda, manga: g.manga, arquero: f.arquero, cantidad: f.cantidad,
+             tallaShort: f.tallaShort, abajo: g.abajo };
+  }
+  function filaLlena(f){
+    if (modo === "cantidades") return parseInt(f.cantidad, 10) > 0;
+    return f.nombre.trim() !== "" || f.numero !== "";
+  }
+  function llenos(){
+    var L = [];
+    grupos.forEach(function(g){
+      g.filas.forEach(function(f){ if (filaLlena(f)) L.push(aPlano(g, f)); });
+    });
+    return L;
+  }
+  function filasSinTalla(){
+    var n = 0;
+    grupos.forEach(function(g){
+      g.filas.forEach(function(f){ if (filaLlena(f) && !tallaOk(f.talla)) n++; });
+    });
+    return n;
+  }
+  // Cuantas prendas vale una fila: su cantidad (modo cantidades) o 1
+  function cuantas(d){
+    if (modo === "cantidades") { var n = parseInt(d.cantidad, 10); return (n > 0) ? n : 0; }
+    return 1;
+  }
+  function totalPrendas(L){
+    return L.reduce(function(s, d){ return s + cuantas(d); }, 0);
+  }
+  function cuentaGrupo(g){
+    var n = 0;
+    g.filas.forEach(function(f){ if (filaLlena(f)) n += (modo === "cantidades" ? (parseInt(f.cantidad, 10) || 0) : 1); });
+    return n;
+  }
+
+  function buscarGrupo(id){
+    for (var i = 0; i < grupos.length; i++) if (grupos[i].id === Number(id)) return grupos[i];
+    return null;
+  }
+  function buscarFila(g, id){
+    if (!g) return null;
+    for (var i = 0; i < g.filas.length; i++) if (g.filas[i].id === Number(id)) return g.filas[i];
     return null;
   }
 
-  rowsEl.addEventListener("input", function(e){
-    var f = e.target.getAttribute("data-f");
+  // ---- Pintar ----
+  function tituloGrupo(g){
+    var t = (g.prenda === "CONJUNTO" ? "Conjunto" : "Camiseta") + " " +
+            (g.genero === "VARON" ? "varón" : "dama") + " · manga " + g.manga.toLowerCase();
+    if (esFaldaV(g)) t += " · con falda";
+    return t;
+  }
+  function seg(campo, ops, valor, gid){
+    return "<div class='seg'>" + ops.map(function(o){
+      return "<button type='button' data-g='" + gid + "' data-seg='" + campo + "' data-v='" + o[0] + "'" +
+             (o[0] === valor ? " class='on'" : "") + ">" + o[1] + "</button>";
+    }).join("") + "</div>";
+  }
+  function campoInput(g, f, c, extra){
+    return "<input data-g='" + g.id + "' data-f='" + f.id + "' data-c='" + c + "' value=\"" + esc(f[c] || "") + "\" " +
+           "autocomplete='off' enterkeyhint='next' " + extra + ">";
+  }
+  function filaHTML(g, f, i){
+    var malTalla = (f.talla !== "" && !tallaOk(f.talla)) || (f.rev && !tallaOk(f.talla));
+    var tallaIn = campoInput(g, f, "talla", "class='talla" + (malTalla ? " bad" : "") + "' maxlength='5' " +
+                  "placeholder='Talla' autocapitalize='characters' list='tallasLista'");
+    var h = "<div class='fila" + (modo === "cantidades" ? " cant" : "") + (f.rev ? " rev" : "") + "' data-fila='" + f.id + "'>" +
+            "<div class='idx'>" + (i + 1) + "</div>";
+    if (modo === "cantidades"){
+      h += tallaIn +
+           campoInput(g, f, "numero", "inputmode='numeric' maxlength='4' placeholder='N° (opc.)'") +
+           campoInput(g, f, "cantidad", "inputmode='numeric' maxlength='3' placeholder='Cant.'");
+    } else {
+      h += campoInput(g, f, "nombre", "class='nom' maxlength='40' placeholder='Nombre' autocapitalize='characters'") +
+           campoInput(g, f, "numero", "inputmode='numeric' maxlength='4' placeholder='N°'") +
+           tallaIn;
+    }
+    h += "<button type='button' class='mas' data-mas='" + f.id + "' data-g='" + g.id + "' title='Más opciones'>" +
+         (f.abierta ? "✕" : "⋯") + "</button>";
+
+    // Lo especial de la fila, a la vista
+    var tags = [];
+    if (f.arquero && modo !== "cantidades") tags.push("ARQUERO");
+    if (g.prenda === "CONJUNTO" && f.tallaShort && f.tallaShort !== f.talla)
+      tags.push((esFaldaV(g) ? "FALDA " : "SHORT ") + f.tallaShort);
+    if (tags.length) h += "<div class='tags'>" + tags.map(function(t){ return "<span>" + t + "</span>"; }).join("") + "</div>";
+
+    if (f.abierta){
+      h += "<div class='panel'>";
+      if (modo !== "cantidades")
+        h += "<label class='chk'><input type='checkbox' data-g='" + g.id + "' data-f='" + f.id + "' data-c='arquero'" +
+             (f.arquero ? " checked" : "") + "> Arquero (diseño distinto)</label>";
+      if (g.prenda === "CONJUNTO")
+        h += "<div class='pshort'><span>" + (esFaldaV(g) ? "Talla de la falda" : "Talla del short") + "</span>" +
+             "<select data-g='" + g.id + "' data-f='" + f.id + "' data-c='tallaShort'>" + opcionesShort(f.tallaShort || "") + "</select></div>";
+      if (modo === "cantidades")
+        h += "<button type='button' class='mini' data-dup='" + f.id + "' data-g='" + g.id + "'>Duplicar</button>";
+      h += "<button type='button' class='mini' data-quitar='" + f.id + "' data-g='" + g.id + "'>Quitar fila</button>";
+      h += "</div>";
+    }
+    return h + "</div>";
+  }
+  function grupoHTML(g){
+    var h = "<div class='grupo' data-grupo='" + g.id + "'>" +
+      "<div class='ghead'><div class='gtit'>" + tituloGrupo(g) +
+      " <span class='gcount' data-gcount='" + g.id + "'>" + cuentaGrupo(g) + "</span></div>" +
+      "<button type='button' class='gdel' data-gdel='" + g.id + "'>" + (g.confirmar ? "¿Quitar grupo?" : "✕") + "</button></div>" +
+      "<div class='segs'>" +
+        seg("genero", [["VARON","Varón"],["DAMA","Dama"]], g.genero, g.id) +
+        seg("prenda", [["CAMISETA","Camiseta"],["CONJUNTO","Conjunto"]], g.prenda, g.id) +
+        seg("manga", [["CORTA","M. corta"],["LARGA","M. larga"]], g.manga, g.id) +
+        (g.prenda === "CONJUNTO" && g.genero === "VARON"
+          ? seg("abajo", [["SHORT","Short"],["FALDA","Falda"]], g.abajo || "SHORT", g.id) : "") +
+      "</div>" +
+      "<div class='fila cab" + (modo === "cantidades" ? " cant" : "") + "'><div></div>" +
+        (modo === "cantidades" ? "<div>Talla</div><div>N°</div><div>Cant.</div>"
+                               : "<div>Nombre</div><div>N°</div><div>Talla</div>") + "<div></div></div>";
+    g.filas.forEach(function(f, i){ h += filaHTML(g, f, i); });
+    h += "<button type='button' class='addrow' data-addrow='" + g.id + "'>+ Agregar " +
+         (modo === "cantidades" ? "talla" : "jugador") + "</button></div>";
+    return h;
+  }
+
+  function pintar(){
+    gruposEl.innerHTML = grupos.map(grupoHTML).join("");
+    document.getElementById("modoNombres").className = (modo === "nombres") ? "on" : "";
+    document.getElementById("modoCantidades").className = (modo === "cantidades") ? "on" : "";
+    document.getElementById("pegar").style.display = (modo === "cantidades") ? "none" : "";
+    actualizarResumen();
+    guardar();
+  }
+
+  function enfocar(fid, campo){
+    var el = gruposEl.querySelector("[data-f='" + fid + "'][data-c='" + campo + "']");
+    if (el) { el.focus(); try { el.scrollIntoView({ block: "nearest" }); } catch (e) {} }
+  }
+  function ordenCampos(){ return modo === "cantidades" ? ["talla","numero","cantidad"] : ["nombre","numero","talla"]; }
+
+  // ---- Escribir ----
+  gruposEl.addEventListener("input", function(e){
+    var t = e.target, c = t.getAttribute("data-c");
+    if (!c) return;
+    var g = buscarGrupo(t.getAttribute("data-g")), f = buscarFila(g, t.getAttribute("data-f"));
     if (!f) return;
-    var d = buscar(e.target.getAttribute("data-id"));
-    if (!d) return;
-    if (f === "arquero"){ d.arquero = e.target.checked; }
-    else if (f === "numero"){ d.numero = e.target.value.replace(/[^0-9]/g,""); e.target.value = d.numero; }
-    else if (f === "nombre"){ d.nombre = e.target.value.toUpperCase(); e.target.value = d.nombre; }
-    else { d[f] = e.target.value; }
+    if (c === "arquero") { f.arquero = t.checked; }
+    else if (c === "numero" || c === "cantidad") {
+      var v = t.value.replace(/[^0-9]/g, "");
+      if (v !== t.value) t.value = v;
+      f[c] = v;
+    }
+    else if (c === "nombre") { f.nombre = t.value.toUpperCase(); }
+    else if (c === "talla") {
+      f.talla = normTalla(t.value);
+      t.classList.toggle("bad", f.talla !== "" && !tallaOk(f.talla));
+    }
+    else { f[c] = t.value; }
+    if (f.rev) {
+      f.rev = false;
+      var fila = gruposEl.querySelector("[data-fila='" + f.id + "']");
+      if (fila) fila.classList.remove("rev");
+    }
+    var gc = gruposEl.querySelector("[data-gcount='" + g.id + "']");
+    if (gc) gc.textContent = cuentaGrupo(g);
     actualizarResumen();
     guardar();
   });
 
-  rowsEl.addEventListener("change", function(e){
-    if (e.target.getAttribute("data-f")) { actualizarResumen(); guardar(); }
+  gruposEl.addEventListener("change", function(e){
+    var t = e.target, c = t.getAttribute("data-c");
+    if (!c) return;
+    var g = buscarGrupo(t.getAttribute("data-g")), f = buscarFila(g, t.getAttribute("data-f"));
+    if (!f) return;
+    if (c === "talla") { if (t.value !== f.talla) t.value = f.talla; return; }
+    // solo lo que cambia la vista; los textos ya se guardaron al escribir
+    if (c === "arquero") { f.arquero = t.checked; pintar(); }
+    if (c === "tallaShort") { f.tallaShort = t.value; pintar(); }
   });
 
-  rowsEl.addEventListener("click", function(e){
-    var id = e.target.getAttribute("data-del");
-    if (!id) return;
-    datos = datos.filter(function(d){ return d.id !== Number(id); });
-    if (datos.length === 0) datos.push(nuevaFila());
+  // Enter: al siguiente campo; del ultimo, a la fila de abajo (o una nueva)
+  gruposEl.addEventListener("keydown", function(e){
+    if (e.key !== "Enter") return;
+    var t = e.target, c = t.getAttribute("data-c");
+    if (!c || t.tagName !== "INPUT" || t.type === "checkbox") return;
+    e.preventDefault();
+    var g = buscarGrupo(t.getAttribute("data-g")), f = buscarFila(g, t.getAttribute("data-f"));
+    if (!f) return;
+    var orden = ordenCampos(), k = orden.indexOf(c);
+    if (k >= 0 && k < orden.length - 1) { enfocar(f.id, orden[k + 1]); return; }
+    if (c === "talla") t.value = f.talla;
+    var pos = g.filas.indexOf(f);
+    if (pos < g.filas.length - 1) { enfocar(g.filas[pos + 1].id, orden[0]); return; }
+    var nueva = nuevaFila();
+    g.filas.push(nueva);
     pintar();
+    enfocar(nueva.id, orden[0]);
   });
 
-  document.getElementById("add").addEventListener("click", function(){
-    datos.push(nuevaFila()); pintar();
-    window.scrollTo(0, document.body.scrollHeight);
+  gruposEl.addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("button") : e.target;
+    if (!b || !gruposEl.contains(b)) return;
+    var g, f, i;
+
+    if (b.hasAttribute("data-seg")){
+      g = buscarGrupo(b.getAttribute("data-g"));
+      if (!g) return;
+      g[b.getAttribute("data-seg")] = b.getAttribute("data-v");
+      pintar();
+      return;
+    }
+    if (b.hasAttribute("data-gdel")){
+      g = buscarGrupo(b.getAttribute("data-gdel"));
+      if (!g) return;
+      if (cuentaGrupo(g) > 0 && !g.confirmar){
+        g.confirmar = true;
+        pintar();
+        setTimeout(function(){ if (g.confirmar) { g.confirmar = false; pintar(); } }, 3500);
+        return;
+      }
+      grupos = grupos.filter(function(x){ return x !== g; });
+      if (grupos.length === 0) grupos.push(grupoConFilas(null, 3));
+      pintar();
+      return;
+    }
+    if (b.hasAttribute("data-addrow")){
+      g = buscarGrupo(b.getAttribute("data-addrow"));
+      if (!g) return;
+      var nf = nuevaFila();
+      g.filas.push(nf);
+      pintar();
+      enfocar(nf.id, ordenCampos()[0]);
+      return;
+    }
+    if (b.hasAttribute("data-mas")){
+      g = buscarGrupo(b.getAttribute("data-g"));
+      f = buscarFila(g, b.getAttribute("data-mas"));
+      if (!f) return;
+      f.abierta = !f.abierta;
+      pintar();
+      return;
+    }
+    if (b.hasAttribute("data-quitar")){
+      g = buscarGrupo(b.getAttribute("data-g"));
+      f = buscarFila(g, b.getAttribute("data-quitar"));
+      if (!f) return;
+      g.filas = g.filas.filter(function(x){ return x !== f; });
+      if (g.filas.length === 0) g.filas.push(nuevaFila());
+      pintar();
+      return;
+    }
+    if (b.hasAttribute("data-dup")){
+      g = buscarGrupo(b.getAttribute("data-g"));
+      f = buscarFila(g, b.getAttribute("data-dup"));
+      if (!f) return;
+      var copia = JSON.parse(JSON.stringify(f));
+      copia.id = proximoId++;
+      copia.numero = "";
+      copia.abierta = false;
+      f.abierta = false;
+      i = g.filas.indexOf(f);
+      g.filas.splice(i + 1, 0, copia);
+      pintar();
+      return;
+    }
   });
-  document.getElementById("add5").addEventListener("click", function(){
-    for (var i=0;i<5;i++) datos.push(nuevaFila());
+
+  document.getElementById("addGrupo").addEventListener("click", function(){
+    var base = grupos.length ? grupos[grupos.length - 1] : null;
+    var g = grupoConFilas(base, 3);
+    grupos.push(g);
     pintar();
+    var el = gruposEl.querySelector("[data-grupo='" + g.id + "']");
+    if (el) { try { el.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) {} }
   });
 
-  function llenos(){
-    return datos.filter(function(d){ return d.nombre.trim() !== "" || d.numero !== ""; });
+  function cambiarModo(m){
+    if (m === modo) return;
+    modo = m;
+    pintar();
+  }
+  document.getElementById("modoNombres").addEventListener("click", function(){ cambiarModo("nombres"); });
+  document.getElementById("modoCantidades").addEventListener("click", function(){ cambiarModo("cantidades"); });
+
+  // ---- Pegar una lista (WhatsApp, Excel, notas) ----
+  //  "JUAN PEREZ 10 M", "1. JUAN 10 M", "JUAN, 10, M", "JUAN	10	M", "LUIS 9 S ARQUERO"
+  function parsearLinea(linea){
+    var l = String(linea).replace(/ /g, " ").trim();
+    if (!l) return null;
+    var U = l.toUpperCase();
+    if (U.indexOf("NOMBRE") >= 0 && U.indexOf("TALLA") >= 0) return null;   // fila de titulos
+
+    var toks = (/[\t;,]/.test(l) ? l.split(/[\t;,]+/) : l.split(/\s+/));
+    toks = toks.map(function(t){ return t.trim(); }).filter(function(t){ return t !== ""; });
+    if (toks.length && /^\d+[.)\-]$/.test(toks[0])) toks.shift();             // "1." "1)" "1-"
+
+    var arquero = false;
+    toks = toks.filter(function(t){
+      var u = t.toUpperCase().replace(/\./g, "");
+      if (u === "ARQUERO" || u === "ARQUERA" || u === "ARQ") { arquero = true; return false; }
+      return true;
+    });
+    toks = toks.map(function(t){ return t.replace(/^(#|N°|Nº|NRO\.?|NO\.|N\.)\s*/i, ""); })
+               .filter(function(t){ return t !== ""; });
+
+    function esNum(t){ return /^\d{1,4}$/.test(t); }
+    function esLetra(t){ return !esNum(t) && LETRAS.indexOf(normTalla(t)) >= 0; }
+
+    var nNums = toks.filter(esNum).length;
+    var hayLetra = toks.some(esLetra);
+    // "1 JUAN 10 M": el primero es el numero de item
+    if (toks.length >= 3 && esNum(toks[0]) && (nNums >= 3 || (nNums >= 2 && hayLetra))) toks.shift();
+
+    var usado = toks.map(function(){ return false; });
+    var talla = "", numero = "", i;
+
+    for (i = toks.length - 1; i >= 0; i--) {                                   // talla con letras
+      if (esLetra(toks[i])) { talla = normTalla(toks[i]); usado[i] = true; break; }
+    }
+    var idxNum = [];
+    toks.forEach(function(t, k){ if (!usado[k] && esNum(t)) idxNum.push(k); });
+    if (!talla && idxNum.length >= 2) {                                         // "JUAN 10 12": numero 10, talla 12
+      var ult = idxNum[idxNum.length - 1];
+      if (tallaOk(toks[ult])) { talla = toks[ult]; usado[ult] = true; idxNum.pop(); }
+    }
+    if (idxNum.length) { numero = toks[idxNum[0]]; usado[idxNum[0]] = true; }
+
+    var nombre = toks.filter(function(t, k){ return !usado[k] && !esNum(t); }).join(" ").toUpperCase();
+    if (!nombre && !numero && !talla) return null;
+    return { nombre: nombre, numero: numero, talla: talla, arquero: arquero };
   }
 
+  var modalPegar = document.getElementById("modalPegar");
+  document.getElementById("pegar").addEventListener("click", function(){
+    var sel = document.getElementById("pegarGrupo");
+    sel.innerHTML = grupos.map(function(g, i){
+      return "<option value='" + g.id + "'" + (i === grupos.length - 1 ? " selected" : "") + ">" +
+             esc(tituloGrupo(g)) + "</option>";
+    }).join("") + "<option value='nuevo'>Grupo nuevo</option>";
+    modalPegar.style.display = "flex";
+    setTimeout(function(){ document.getElementById("pegarTxt").focus(); }, 50);
+  });
+  document.getElementById("pegarNo").addEventListener("click", function(){ modalPegar.style.display = "none"; });
+  modalPegar.addEventListener("click", function(e){ if (e.target === modalPegar) modalPegar.style.display = "none"; });
+  document.getElementById("pegarSi").addEventListener("click", function(){
+    var txt = document.getElementById("pegarTxt").value;
+    // Copiado de Excel CON la fila de titulos: se lee por columnas
+    if (txt.indexOf("\t") >= 0) {
+      var tabla = txt.split(/\r?\n/).map(function(l){ return l.split("\t"); });
+      if (importarTabla(tabla, "pegaste")) {
+        modalPegar.style.display = "none";
+        document.getElementById("pegarTxt").value = "";
+        return;
+      }
+    }
+    var filas = txt.split(/\r?\n/).map(parsearLinea).filter(function(x){ return x; });
+    if (filas.length === 0) { mensaje("No encontré jugadores en lo que pegaste."); return; }
+
+    var v = document.getElementById("pegarGrupo").value, g;
+    if (v === "nuevo") {
+      g = nuevoGrupo(grupos.length ? grupos[grupos.length - 1] : null);
+      grupos.push(g);
+    } else {
+      g = buscarGrupo(v);
+    }
+    // las filas vacias del final se reemplazan
+    while (g.filas.length && !filaLlena(g.filas[g.filas.length - 1])) g.filas.pop();
+
+    var nMal = 0;
+    filas.forEach(function(p){
+      var f = nuevaFila();
+      f.nombre = p.nombre; f.numero = p.numero; f.talla = p.talla; f.arquero = p.arquero;
+      if (!tallaOk(f.talla) || !f.nombre) { f.rev = true; nMal++; }
+      g.filas.push(f);
+    });
+    modalPegar.style.display = "none";
+    document.getElementById("pegarTxt").value = "";
+    pintar();
+    mensaje("Agregué " + filas.length + (filas.length === 1 ? " jugador." : " jugadores.") +
+            (nMal ? " Revisa " + nMal + " en amarillo (falta talla o nombre)." : ""));
+  });
+
+  // ---- Subir un Excel (o CSV) con la lista ----
+  //  Se lee como lo lee CHDSUBLIPRO: un titulo con el genero (CAMISETAS
+  //  VARON, CONJUNTOS DAMA...), la fila de titulos (NOMBRE, TALLA, NUMERO,
+  //  CANTIDAD, TALLA SHORT, TALLA FALDA) y una fila por jugador. Tambien
+  //  vuelve a abrir una lista bajada de este mismo formulario.
+  function sinTildes(t){
+    return String(t == null ? "" : t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
+  }
+  function esTituloCant(c){
+    var t = sinTildes(c).replace(/[.\s]/g, "");
+    return ["CANTIDAD","CANTIDADES","CANT","UNIDADES","PRENDAS","QTY"].indexOf(t) >= 0;
+  }
+  // Donde empieza cada tabla cuando hay varias lado a lado (varon a la
+  // izquierda, dama a la derecha): las columnas donde arranca cada fila de
+  // titulos (ITEM NOMBRE TALLA NUMERO) separada por celdas vacias
+  function inicioDeTablas(filasTabla){
+    var ini = [];
+    filasTabla.forEach(function(celdas){
+      var C = celdas.map(function(c){ return sinTildes(c); });
+      var k = 0;
+      while (k < C.length) {
+        if (!C[k]) { k++; continue; }
+        var a = k;
+        while (k < C.length && C[k]) k++;
+        var run = C.slice(a, k);
+        var hayTalla = run.some(function(c){ return c.indexOf("TALLA") >= 0 && c.indexOf("SHORT") < 0 && c.indexOf("FALDA") < 0 && c.length <= 12; });
+        var hayNom = run.some(function(c){ return c.indexOf("NOMBRE") >= 0 || c.indexOf("JUGADOR") >= 0 || c.indexOf("APELLIDO") >= 0 || esTituloCant(c); });
+        if (hayTalla && hayNom && ini.indexOf(a) < 0) ini.push(a);
+      }
+    });
+    return ini.sort(function(x, y){ return x - y; });
+  }
+
+  function importarTabla(filasTabla, deDonde){
+    var nuevas = [], nMal = 0, info = {}, col = null, colFinal = null;
+
+    // Varias tablas lado a lado: cada una se lee por separado
+    var ini = inicioDeTablas(filasTabla);
+    var partes = [];
+    if (ini.length <= 1) partes.push(filasTabla);
+    else ini.forEach(function(a, i){
+      var b = (i + 1 < ini.length) ? ini[i + 1] : undefined;
+      partes.push(filasTabla.map(function(r){ return (r || []).slice(a, b); }));
+    });
+
+    partes.forEach(function(parte){
+    var genero = "", prenda = "CAMISETA", leyendo = false;
+    col = null;
+    parte.forEach(function(celdas){
+      var C = celdas.map(function(c){ return sinTildes(c); });
+      var linea = C.join(" ").replace(/\s+/g, " ").trim();
+      if (!linea) return;
+
+      // Datos del pedido (listas bajadas de este formulario)
+      if (C[0] === "EQUIPO" || C[0] === "EQUIPO / CLIENTE") { info.equipo = String(celdas[1] || "").trim(); return; }
+      if (C[0] === "CONTACTO") { info.contacto = String(celdas[1] || "").trim(); return; }
+      if (C[0] === "TELA CAMISETA") { info.telaCamiseta = String(celdas[1] || "").trim(); return; }
+      if (C[0] === "TELA SHORT") { info.telaShort = String(celdas[1] || "").trim(); return; }
+      if (C[0].indexOf("RESUMEN") === 0) { leyendo = false; return; }
+
+      // Fila de titulos
+      var iTalla = -1, iNom = -1, iNum = -1, iCant = -1, iTS = -1, iTF = -1;
+      C.forEach(function(c, k){
+        if (c.indexOf("TALLA") >= 0) {
+          if (c.indexOf("FALDA") >= 0) iTF = k;
+          else if (c.indexOf("SHORT") >= 0 || c.indexOf("PANTALON") >= 0) iTS = k;
+          else if (c.length <= 12) iTalla = k;
+        } else if (iNom < 0 && (c.indexOf("NOMBRE") >= 0 || c.indexOf("JUGADOR") >= 0 || c.indexOf("APELLIDO") >= 0) && c.length <= 25) iNom = k;
+        else if (iNum < 0 && (c.indexOf("NUMERO") >= 0 || c.indexOf("DORSAL") >= 0 || c === "N" || c === "NRO" || c === "N\u00b0" || c === "NO")) iNum = k;
+        else if (esTituloCant(c)) iCant = k;
+      });
+      if (iTalla >= 0 && (iNom >= 0 || iCant >= 0)) {
+        col = { talla: iTalla, nom: iNom, num: iNum, cant: iCant, ts: iTS, tf: iTF };
+        leyendo = true;
+        return;
+      }
+
+      var tallaCelda = (col && leyendo) ? String(celdas[col.talla] == null ? "" : celdas[col.talla]).trim() : "";
+      if (!col || !leyendo || !tallaCelda || tallaCelda === "-") {
+        // Un titulo: dice el genero y si es conjunto
+        if (/\b(VARON|VARONES|HOMBRE|HOMBRES|NINO|NINOS)\b/.test(linea)) genero = "VARON";
+        if (/\b(DAMA|DAMAS|MUJER|MUJERES|NINA|NINAS|PRINCESA)\b/.test(linea)) genero = "DAMA";
+        if (linea.indexOf("CONJUNTO") >= 0) prenda = "CONJUNTO";
+        else if (linea.indexOf("CAMISETA") >= 0 || linea.indexOf("POLO") >= 0) prenda = "CAMISETA";
+        return;
+      }
+
+      function celda(i){ return (i >= 0 && celdas[i] != null) ? String(celdas[i]).trim() : ""; }
+      var f = nuevaFila();
+      f.talla = normTalla(tallaCelda);
+      f.nombre = celda(col.nom).toUpperCase();
+      // "O2" escrito con la letra O: es 02
+      f.numero = celda(col.num).replace(/[oO]/g, "0").replace(/[^0-9]/g, "").slice(0, 4);
+      f.cantidad = celda(col.cant).replace(/[^0-9]/g, "").slice(0, 3);
+      f.arquero = linea.indexOf("ARQUER") >= 0;
+      var ts = normTalla(celda(col.ts)), tf = normTalla(celda(col.tf));
+      // Una nota al costado, en cualquier celda: "SHORT S", "FALDA 10"
+      var nota = linea.match(/\b(SHORT|FALDA)\s*(?:TALLA\s*)?([0-9]{1,2}|S|M|L|XL|XXL|XXXL|XXXXL|2XL|3XL|4XL)\b/);
+      if (nota && tallaOk(normTalla(nota[2]))) {
+        if (nota[1] === "FALDA" && !tf) tf = normTalla(nota[2]);
+        if (nota[1] === "SHORT" && !ts) ts = normTalla(nota[2]);
+      }
+      var g = { genero: genero || "VARON", prenda: prenda,
+                manga: linea.indexOf("MANGA LARGA") >= 0 ? "LARGA" : "CORTA", abajo: "SHORT" };
+      if (tf && tf !== "-" && g.genero === "VARON") { g.prenda = "CONJUNTO"; g.abajo = "FALDA"; f.tallaShort = tf; }
+      else if (ts && ts !== "-") { f.tallaShort = (ts === f.talla) ? "" : ts; }
+      else if (tf && tf !== "-") { f.tallaShort = (tf === f.talla) ? "" : tf; }
+      if (!tallaOk(f.talla) || !genero) { f.rev = true; nMal++; }
+      nuevas.push({ g: g, f: f });
+    });
+    if (col) colFinal = col;
+    });
+
+    if (nuevas.length === 0) return false;
+
+    // Sin nombres y con CANTIDAD: es una lista de cantidades
+    if (colFinal && colFinal.nom < 0 && colFinal.cant >= 0) modo = "cantidades";
+    else if (colFinal && colFinal.nom >= 0) modo = "nombres";
+
+    // Se quitan los grupos que estan vacios y se reparten en grupos
+    grupos = grupos.filter(function(g){ return cuentaGrupo(g) > 0 || g.filas.some(filaLlena); });
+    var nGruposAntes = grupos.length;
+    nuevas.forEach(function(x){
+      var g = null;
+      for (var i = 0; i < grupos.length; i++) {
+        var h = grupos[i];
+        if (h.genero === x.g.genero && h.prenda === x.g.prenda && h.manga === x.g.manga && (h.abajo || "SHORT") === x.g.abajo) { g = h; break; }
+      }
+      if (!g) { g = nuevoGrupo(x.g); grupos.push(g); }
+      while (g.filas.length && !filaLlena(g.filas[g.filas.length - 1])) g.filas.pop();
+      g.filas.push(x.f);
+    });
+
+    ["equipo","contacto","telaCamiseta","telaShort"].forEach(function(id){
+      var el = document.getElementById(id);
+      if (info[id] && !el.value.trim()) el.value = info[id];
+    });
+
+    pintar();
+    var nG = grupos.length - nGruposAntes;
+    mensaje("Le\u00ed " + nuevas.length + (modo === "cantidades" ? " filas" : " jugadores") +
+            (nG > 0 ? " en " + nG + (nG === 1 ? " grupo." : " grupos.") : ".") +
+            (nMal ? " Revisa " + nMal + " en amarillo." : ""));
+    return true;
+  }
+
+  document.getElementById("subirExcel").addEventListener("click", function(){
+    document.getElementById("archivoExcel").click();
+  });
+  document.getElementById("archivoExcel").addEventListener("change", function(e){
+    var file = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+    if (typeof XLSX === "undefined") { mensaje("No se pudo cargar el lector de Excel. Copia la lista y usa Pegar lista."); return; }
+    var fr = new FileReader();
+    fr.onload = function(){
+      try {
+        var libro = XLSX.read(new Uint8Array(fr.result), { type: "array" });
+        var tabla = [];
+        libro.SheetNames.forEach(function(n){
+          tabla = tabla.concat(XLSX.utils.sheet_to_json(libro.Sheets[n], { header: 1, raw: false, defval: "" }));
+          tabla.push([]);
+        });
+        if (!importarTabla(tabla, "archivo"))
+          mensaje("No encontr\u00e9 la lista en ese archivo. Tiene que tener una fila de t\u00edtulos con NOMBRE y TALLA.");
+      } catch (err) {
+        mensaje("No pude leer ese archivo. " + (err && err.message ? err.message : ""));
+      }
+    };
+    fr.readAsArrayBuffer(file);
+  });
+
+  // ---- Resumen y avisos ----
   function actualizarResumen(){
     var L = llenos();
-    document.getElementById("count").textContent =
-      L.length + (L.length === 1 ? " jugador" : " jugadores");
+    var tot = totalPrendas(L);
+    document.getElementById("count").textContent = (modo === "cantidades")
+      ? tot + (tot === 1 ? " prenda" : " prendas")
+      : L.length + (L.length === 1 ? " jugador" : " jugadores");
 
     var mapa = {};
     L.forEach(function(d){
-      var k = d.genero + "|" + d.prenda + "|" + d.talla;
-      mapa[k] = (mapa[k] || 0) + 1;
+      var k = d.genero + "|" + d.prenda + "|" + tallaResumen(d);
+      mapa[k] = (mapa[k] || 0) + cuantas(d);
     });
 
     var claves = Object.keys(mapa).sort();
     var html = "<tr><th>Género</th><th>Prenda</th><th>Talla</th><th>Cantidad</th></tr>";
     if (claves.length === 0){
-      html += "<tr><td colspan='4' style='color:var(--muted)'>Aún no hay jugadores</td></tr>";
+      html += "<tr><td colspan='4' style='color:var(--muted)'>" + (modo === "cantidades" ? "Aún no hay prendas" : "Aún no hay jugadores") + "</td></tr>";
     } else {
       claves.forEach(function(k){
         var p = k.split("|");
-        html += "<tr><td>" + p[0] + "</td><td>" + p[1] + "</td><td>" + p[2] + "</td><td>" + mapa[k] + "</td></tr>";
+        html += "<tr><td>" + p[0] + "</td><td>" + p[1] + "</td><td>" + esc(p[2]) + "</td><td>" + mapa[k] + "</td></tr>";
       });
     }
     document.getElementById("resumen").innerHTML = html;
 
-    // Avisos
     var av = [];
     var vistos = {};
     L.forEach(function(d){
@@ -324,8 +964,11 @@
     });
     var sinNum = L.filter(function(d){ return d.numero === ""; }).length;
     var sinNom = L.filter(function(d){ return d.nombre.trim() === ""; }).length;
+    var sinTalla = filasSinTalla();
 
     var msgs = [];
+    if (modo === "cantidades") { av = []; sinNum = 0; sinNom = 0; }
+    if (sinTalla) msgs.push(sinTalla + " fila(s) sin talla o con una talla que no reconozco (en rojo).");
     if (av.length) msgs.push("Números repetidos: " + av.join(", ") + ". Revisa que sea a propósito.");
     if (sinNum) msgs.push(sinNum + " jugador(es) sin número.");
     if (sinNom) msgs.push(sinNom + " jugador(es) sin nombre.");
@@ -333,6 +976,7 @@
     document.getElementById("avisos").innerHTML = msgs.length
       ? "<div class='alert'>" + msgs.join("<br>") + "</div>" : "";
   }
+
 
   // ---- CSV con el formato que espera el taller ----
   function campo(v){
@@ -366,14 +1010,26 @@
       if (grupo.length === 0) return;
 
       out.push(campo(b[2]));
-      out.push("ITEM,NOMBRE,TALLA,NUMERO,OBSERVACION");
-
-      grupo.forEach(function(d, i){
-        var obs = [];
-        if (d.arquero) obs.push("ARQUERO");
-        obs.push("MANGA " + d.manga);
-        out.push([ (i+1), campo(d.nombre), campo(d.talla), campo(d.numero), campo(obs.join(" ")) ].join(","));
-      });
+      var ex = extras(grupo);
+      var tit = ex.map(function(e){ return "," + e.t; }).join("");
+      if (modo === "cantidades"){
+        out.push("ITEM,TALLA,NUMERO,CANTIDAD,OBSERVACION" + tit);
+        grupo.forEach(function(d, i){
+          var f = [ (i+1), campo(d.talla), campo(d.numero), cuantas(d), campo("MANGA " + d.manga) ];
+          ex.forEach(function(e){ f.push(campo(e.v(d))); });
+          out.push(f.join(","));
+        });
+      } else {
+        out.push("ITEM,NOMBRE,TALLA,NUMERO,OBSERVACION" + tit);
+        grupo.forEach(function(d, i){
+          var obs = [];
+          if (d.arquero) obs.push("ARQUERO");
+          obs.push("MANGA " + d.manga);
+          var f = [ (i+1), campo(d.nombre), campo(d.talla), campo(d.numero), campo(obs.join(" ")) ];
+          ex.forEach(function(e){ f.push(campo(e.v(d))); });
+          out.push(f.join(","));
+        });
+      }
       out.push("");
     });
 
@@ -390,7 +1046,14 @@
   }
 
   function validar(){
-    if (llenos().length === 0){ mensaje("Agrega al menos un jugador antes de descargar."); return false; }
+    if (llenos().length === 0){
+      mensaje(modo === "cantidades" ? "Escribe la cantidad de al menos una talla." : "Agrega al menos un jugador antes de descargar.");
+      return false;
+    }
+    if (filasSinTalla() > 0){
+      mensaje("Falta la talla (o no la reconozco) en " + filasSinTalla() + " fila(s). Est\u00e1n en rojo.");
+      return false;
+    }
     if (!datosDelPedido().equipo){
       mensaje("Escribe el nombre del equipo o cliente.");
       document.getElementById("equipo").focus();
@@ -455,7 +1118,7 @@
     push(["FECHA", new Date().toLocaleDateString("es-PE")], "info");
     push(["TELA CAMISETA", p.telaCamiseta], "info");
     push(["TELA SHORT", p.telaShort], "info");
-    push(["TOTAL DE PRENDAS", L.length], "info");
+    push(["TOTAL DE PRENDAS", totalPrendas(L)], "info");
     if (fotoArchivo) push(["FOTO DE REFERENCIA", fotoArchivo.name + "  (archivo aparte)"], "info");
     push([], "vacio");
 
@@ -470,25 +1133,39 @@
       var grupo = L.filter(function(d){ return d.genero === b[0] && d.prenda === b[1]; });
       if (grupo.length === 0) return;
 
-      push([b[2] + "   (" + grupo.length + ")", "", "", "", ""], "seccion");
-      push(["ITEM","NOMBRE","TALLA","NUMERO","OBSERVACION"], "cabecera");
-      grupo.forEach(function(d, i){
-        var obs = [];
-        if (d.arquero) obs.push("ARQUERO");
-        obs.push("MANGA " + d.manga);
-        push([ i+1, d.nombre, d.talla, d.numero, obs.join(" ") ], "dato");
-      });
+      push([b[2] + "   (" + totalPrendas(grupo) + ")", "", "", "", ""], "seccion");
+      var ex = extras(grupo);
+      var tit = ex.map(function(e){ return e.t; });
+      if (modo === "cantidades"){
+        push(["ITEM","TALLA","NUMERO","CANTIDAD","OBSERVACION"].concat(tit), "cabecera");
+        grupo.forEach(function(d, i){
+          var f = [ i+1, d.talla, d.numero, cuantas(d), "MANGA " + d.manga ];
+          ex.forEach(function(e){ f.push(e.v(d)); });
+          push(f, "dato");
+        });
+      } else {
+        push(["ITEM","NOMBRE","TALLA","NUMERO","OBSERVACION"].concat(tit), "cabecera");
+        grupo.forEach(function(d, i){
+          var obs = [];
+          if (d.arquero) obs.push("ARQUERO");
+          obs.push("MANGA " + d.manga);
+          var f = [ i+1, d.nombre, d.talla, d.numero, obs.join(" ") ];
+          ex.forEach(function(e){ f.push(e.v(d)); });
+          push(f, "dato");
+        });
+      }
       push([], "vacio");
     });
 
     var mapa = {};
     L.forEach(function(d){
-      var k = d.genero + " " + d.prenda + " " + d.talla;
-      mapa[k] = (mapa[k] || 0) + 1;
+      var k = d.genero + " " + d.prenda + " " + tallaResumen(d);
+      mapa[k] = (mapa[k] || 0) + cuantas(d);
     });
     push(["RESUMEN POR TALLA", "", "", "", ""], "seccion");
-    push(["GENERO / PRENDA / TALLA","CANTIDAD","","",""], "cabecera");
-    Object.keys(mapa).sort().forEach(function(k){ push([k, mapa[k], "", "", ""], "dato"); });
+    // La cantidad va en la ultima columna: asi nunca cae debajo de TALLA
+    push(["GENERO / PRENDA / TALLA","","","","CANTIDAD"], "cabecera");
+    Object.keys(mapa).sort().forEach(function(k){ push([k, "", "", "", mapa[k]], "dato"); });
 
     return { filas: filas, roles: roles };
   }
@@ -497,7 +1174,7 @@
     var merges = [];
 
     roles.forEach(function(rol, r){
-      for (var c = 0; c < 5; c++){
+      for (var c = 0; c < 7; c++){
         var ref = XLSX.utils.encode_cell({ r: r, c: c });
         if (!hoja[ref]){
           if (rol === "titulo" || rol === "seccion") hoja[ref] = { t: "s", v: "" };
@@ -506,16 +1183,16 @@
         if (rol === "titulo") hoja[ref].s = estiloTitulo();
         else if (rol === "seccion") hoja[ref].s = estiloSeccion();
         else if (rol === "cabecera") hoja[ref].s = estiloCabecera();
-        else if (rol === "dato") hoja[ref].s = estiloCelda(c === 0 || c === 2 || c === 3);
+        else if (rol === "dato") hoja[ref].s = estiloCelda(c >= 5 || (modo === "cantidades" ? (c <= 3) : (c === 0 || c === 2 || c === 3)));
         else if (rol === "info") hoja[ref].s = (c === 0) ? estiloEtiqueta() : estiloValor();
       }
       if (rol === "titulo" || rol === "seccion"){
-        merges.push({ s:{r:r, c:0}, e:{r:r, c:4} });
+        merges.push({ s:{r:r, c:0}, e:{r:r, c:6} });
       }
     });
 
     hoja["!merges"] = merges;
-    hoja["!cols"] = [{wch:8},{wch:36},{wch:10},{wch:11},{wch:28}];
+    hoja["!cols"] = [{wch:8},{wch:36},{wch:10},{wch:11},{wch:28},{wch:13},{wch:13}];
     hoja["!rows"] = roles.map(function(rol){
       if (rol === "titulo") return { hpt: 30 };
       if (rol === "seccion") return { hpt: 22 };
@@ -669,7 +1346,7 @@
         ["Contacto", p.contacto],
         ["Tela camiseta", p.telaCamiseta],
         ["Tela short", p.telaShort],
-        ["Total prendas", String(L.length)]
+        ["Total prendas", String(totalPrendas(L))]
       ];
       var col2 = M + anchoTexto / 2;
       info.forEach(function(fila, i){
@@ -686,12 +1363,21 @@
 
       function cabeceraBloque(titulo, cols){
         return [
-          [{ content: titulo, colSpan: cols,
+          [{ content: titulo, colSpan: (cols === 4 ? 5 : cols),
              styles: { fillColor: [58,61,68], textColor: [255,255,255],
                        fontStyle: "bold", fontSize: 8, halign: "left", cellPadding: 1.4 } }],
           cols === 5
             ? ["ITEM","NOMBRE","TALLA","N","OBSERVACION"]
-            : ["GENERO / PRENDA / TALLA","CANT."]
+            : (cols === 4 ? ["ITEM","TALLA","N","CANTIDAD","OBSERVACION"] : ["GENERO / PRENDA / TALLA","CANT."])
+        ];
+      }
+
+      function cabeceraCon(titulo, columnas){
+        return [
+          [{ content: titulo, colSpan: columnas.length,
+             styles: { fillColor: [58,61,68], textColor: [255,255,255],
+                       fontStyle: "bold", fontSize: 8, halign: "left", cellPadding: 1.4 } }],
+          columnas
         ];
       }
 
@@ -713,32 +1399,76 @@
         var grupo = L.filter(function(d){ return d.genero === b[0] && d.prenda === b[1]; });
         if (grupo.length === 0) return;
 
-        var filas = grupo.map(function(d, i){
-          var obs = [];
-          if (d.arquero) obs.push("ARQUERO");
-          obs.push(d.manga);
-          return [ i+1, d.nombre, d.talla, d.numero, obs.join(" ") ];
-        });
+        var ex = extras(grupo);
+        var ts = ex.length > 0;
+        var exTit = ex.map(function(e){ return e.p; });
+        var exVal = function(d){ return ex.map(function(e){ return e.v(d) || "-"; }); };
+        // estilos de columnas: las de talla de abajo van centradas, al lado de TALLA
+        var colsEx = function(primera, ancho){
+          var o = {};
+          for (var k = 0; k < ex.length; k++) o[primera + k] = { cellWidth: ancho, halign: "center" };
+          return o;
+        };
+        if (modo === "cantidades" && ts){
+          // con talla de short / falda aparte: va al lado de la talla
+          doc.autoTable(Object.assign({}, estilos, {
+            startY: y,
+            head: cabeceraCon(b[2] + "   (" + totalPrendas(grupo) + ")",
+                              ["ITEM","TALLA"].concat(exTit, ["N","CANTIDAD","OBSERVACION"])),
+            body: grupo.map(function(d, i){ return [ i+1, d.talla ].concat(exVal(d), [ d.numero, cuantas(d), "MANGA " + d.manga ]); }),
+            tableWidth: 130 + 18 * ex.length,
+            columnStyles: Object.assign({
+              0: { cellWidth: 12, halign: "center" },
+              1: { cellWidth: 18, halign: "center" }
+            }, colsEx(2, 18), (function(){ var o = {}; o[2 + ex.length] = { cellWidth: 18, halign: "center" };
+                                            o[3 + ex.length] = { cellWidth: 22, halign: "center" }; return o; })())
+          }));
+        } else if (modo === "cantidades"){
+          doc.autoTable(Object.assign({}, estilos, {
+            startY: y,
+            head: cabeceraBloque(b[2] + "   (" + totalPrendas(grupo) + ")", 4),
+            body: grupo.map(function(d, i){ return [ i+1, d.talla, d.numero, cuantas(d), "MANGA " + d.manga ]; }),
+            tableWidth: 130,
+            columnStyles: {
+              0: { cellWidth: 12, halign: "center" },
+              1: { cellWidth: 20, halign: "center" },
+              2: { cellWidth: 18, halign: "center" },
+              3: { cellWidth: 22, halign: "center" }
+            }
+          }));
+        } else {
+          var filas = grupo.map(function(d, i){
+            var obs = [];
+            if (d.arquero) obs.push("ARQUERO");
+            obs.push(d.manga);
+            return [ i+1, d.nombre, d.talla ].concat(exVal(d), [ d.numero, obs.join(" ") ]);
+          });
 
-        doc.autoTable(Object.assign({}, estilos, {
-          startY: y,
-          head: cabeceraBloque(b[2] + "   (" + grupo.length + ")", 5),
-          body: filas,
-          columnStyles: {
-            0: { cellWidth: 10, halign: "center" },
-            2: { cellWidth: 14, halign: "center" },
-            3: { cellWidth: 14, halign: "center" },
-            4: { cellWidth: 30 }
-          }
-        }));
+          doc.autoTable(Object.assign({}, estilos, {
+            startY: y,
+            head: ts ? cabeceraCon(b[2] + "   (" + grupo.length + ")", ["ITEM","NOMBRE","TALLA"].concat(exTit, ["N","OBSERVACION"]))
+                     : cabeceraBloque(b[2] + "   (" + grupo.length + ")", 5),
+            body: filas,
+            columnStyles: ts ? Object.assign({
+              0: { cellWidth: 10, halign: "center" },
+              2: { cellWidth: 14, halign: "center" }
+            }, colsEx(3, 14), (function(){ var o = {}; o[3 + ex.length] = { cellWidth: 14, halign: "center" };
+                                            o[4 + ex.length] = { cellWidth: 30 }; return o; })()) : {
+              0: { cellWidth: 10, halign: "center" },
+              2: { cellWidth: 14, halign: "center" },
+              3: { cellWidth: 14, halign: "center" },
+              4: { cellWidth: 30 }
+            }
+          }));
+        }
         y = doc.lastAutoTable.finalY + 3;
       });
 
       // Resumen por talla
       var mapa = {};
       L.forEach(function(d){
-        var k = d.genero + " " + d.prenda + " " + d.talla;
-        mapa[k] = (mapa[k] || 0) + 1;
+        var k = d.genero + " " + d.prenda + " " + tallaResumen(d);
+        mapa[k] = (mapa[k] || 0) + cuantas(d);
       });
       var resumen = Object.keys(mapa).sort().map(function(k){ return [k, mapa[k]]; });
 
@@ -784,6 +1514,7 @@
     await ofrecer(nombreBase() + "-referencia." + ext, fotoArchivo);
   }
 
+
   // ---- Reiniciar la lista ----
   var modal = document.getElementById("modal");
 
@@ -794,15 +1525,16 @@
   document.getElementById("modalNo").addEventListener("click", cerrarModal);
   modal.addEventListener("click", function(e){ if (e.target === modal) cerrarModal(); });
   document.addEventListener("keydown", function(e){
-    if (e.key === "Escape" && modal.style.display === "flex") cerrarModal();
+    if (e.key !== "Escape") return;
+    if (modal.style.display === "flex") cerrarModal();
+    if (modalPegar.style.display === "flex") modalPegar.style.display = "none";
   });
 
   document.getElementById("modalSi").addEventListener("click", function(){
     cerrarModal();
 
-    datos = [];
     proximoId = 1;
-    for (var i = 0; i < 3; i++) datos.push(nuevaFila());
+    grupos = [grupoConFilas(null, 3)];
 
     ["equipo","contacto","telaCamiseta","telaShort"].forEach(function(id){
       document.getElementById(id).value = "";
@@ -810,11 +1542,11 @@
 
     fotoArchivo = null;
     document.getElementById("foto").value = "";
-    document.getElementById("fotoNombre").textContent = "Ningun archivo elegido";
+    document.getElementById("fotoNombre").textContent = "Ningún archivo elegido";
     document.getElementById("fotoPrev").innerHTML = "";
     document.getElementById("bajarFoto").style.display = "none";
 
-    try { localStorage.removeItem("chd_lista"); } catch (e) { }
+    try { localStorage.removeItem("chd_lista2"); localStorage.removeItem("chd_lista"); } catch (e) { }
 
     pintar();
     mensaje("Lista reiniciada.");
@@ -823,29 +1555,64 @@
   // ---- Borrador en el navegador de quien llena ----
   function guardar(){
     try {
-      localStorage.setItem("chd_lista", JSON.stringify({
+      localStorage.setItem("chd_lista2", JSON.stringify({
         equipo: document.getElementById("equipo").value,
         contacto: document.getElementById("contacto").value,
         telaCamiseta: document.getElementById("telaCamiseta").value,
         telaShort: document.getElementById("telaShort").value,
-        datos: datos
+        modo: modo,
+        grupos: grupos
       }));
     } catch (e) { /* sin borrador, no pasa nada */ }
   }
 
+  function datosGenerales(o){
+    document.getElementById("equipo").value = o.equipo || "";
+    document.getElementById("contacto").value = o.contacto || "";
+    document.getElementById("telaCamiseta").value = o.telaCamiseta || "";
+    document.getElementById("telaShort").value = o.telaShort || "";
+    modo = (o.modo === "cantidades") ? "cantidades" : "nombres";
+  }
+
   function cargar(){
+    var raw, o;
     try {
-      var raw = localStorage.getItem("chd_lista");
+      raw = localStorage.getItem("chd_lista2");
+      if (raw) {
+        o = JSON.parse(raw);
+        if (o && Array.isArray(o.grupos) && o.grupos.length) {
+          datosGenerales(o);
+          grupos = o.grupos;
+          grupos.forEach(function(g){
+            g.confirmar = false;
+            if (g.id >= proximoId) proximoId = g.id + 1;
+            if (!Array.isArray(g.filas)) g.filas = [];
+            g.filas.forEach(function(f){ if (f.id >= proximoId) proximoId = f.id + 1; });
+          });
+          return true;
+        }
+      }
+      // Un borrador del formulario anterior (una tarjeta por jugador): se
+      // pasa a grupos por genero, prenda, manga y lo de abajo
+      raw = localStorage.getItem("chd_lista");
       if (!raw) return false;
-      var o = JSON.parse(raw);
+      o = JSON.parse(raw);
       if (!o || !Array.isArray(o.datos) || o.datos.length === 0) return false;
-      document.getElementById("equipo").value = o.equipo || "";
-      document.getElementById("contacto").value = o.contacto || "";
-      document.getElementById("telaCamiseta").value = o.telaCamiseta || "";
-      document.getElementById("telaShort").value = o.telaShort || "";
-      datos = o.datos;
-      datos.forEach(function(d){ if (d.id >= proximoId) proximoId = d.id + 1; });
-      return true;
+      datosGenerales(o);
+      var porClave = {};
+      grupos = [];
+      o.datos.forEach(function(d){
+        var k = d.genero + "|" + d.prenda + "|" + d.manga + "|" + (d.abajo || "SHORT");
+        if (!porClave[k]) {
+          porClave[k] = nuevoGrupo({ genero: d.genero, prenda: d.prenda, manga: d.manga, abajo: d.abajo || "SHORT" });
+          grupos.push(porClave[k]);
+        }
+        var f = nuevaFila();
+        f.nombre = d.nombre || ""; f.numero = d.numero || ""; f.talla = d.talla || "";
+        f.cantidad = d.cantidad || ""; f.tallaShort = d.tallaShort || ""; f.arquero = !!d.arquero;
+        porClave[k].filas.push(f);
+      });
+      return grupos.length > 0;
     } catch (e) { return false; }
   }
 
@@ -853,9 +1620,7 @@
     document.getElementById(id).addEventListener("input", guardar);
   });
 
-  if (!cargar()){
-    for (var i=0;i<3;i++) datos.push(nuevaFila());
-  }
+  if (!cargar()) grupos = [grupoConFilas(null, 3)];
   pintar();
 })();
 </script>
