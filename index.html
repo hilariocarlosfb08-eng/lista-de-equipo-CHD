@@ -1654,15 +1654,12 @@
     }
   }
 
-  document.getElementById("descargar").addEventListener("click", async function(){
-    if (!validar()) return;
-
+  // Arma el Excel y devuelve un Blob (o null y avisa si no se pudo)
+  function crearExcel(){
     if (typeof XLSX === "undefined"){
       mensaje("No se pudo cargar el generador de Excel. Usa el boton CSV por ahora.");
-      return;
+      return null;
     }
-
-    var buf;
     try {
       var h = armarHoja();
       var hoja = XLSX.utils.aoa_to_sheet(h.filas);
@@ -1671,13 +1668,18 @@
       var libro = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(libro, hoja, "Pedido");
 
-      buf = XLSX.write(libro, { bookType:"xlsx", type:"array" });
+      var buf = XLSX.write(libro, { bookType:"xlsx", type:"array" });
+      return new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     } catch (e){
       mensaje("No se pudo armar el Excel. " + (e && e.message ? e.message : e));
-      return;
+      return null;
     }
+  }
 
-    await ofrecer(nombreBase() + ".xlsx", new Blob([buf]));
+  document.getElementById("descargar").addEventListener("click", async function(){
+    if (!validar()) return;
+    var excel = crearExcel();
+    if (excel) await ofrecer(nombreBase() + ".xlsx", excel);
   });
 
   document.getElementById("descargarCsv").addEventListener("click", async function(){
@@ -1945,11 +1947,43 @@
     return m.join("\n");
   }
 
-  document.getElementById("enviarWsp").addEventListener("click", function(){
-    if (!validar()) return;
-    var url = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(armarMensajeWsp());
+  // El archivo que se puede compartir desde este celular: el Excel si lo
+  // permite; si no (Chrome de Android no comparte .xlsx), el CSV, que el
+  // taller tambien lee. null = este navegador no comparte archivos.
+  function archivoParaCompartir(){
+    if (!navigator.share || !navigator.canShare || typeof File === "undefined") return null;
+    var cands = [];
+    var excel = (typeof XLSX !== "undefined") ? crearExcel() : null;
+    if (excel) cands.push(new File([excel], nombreBase() + ".xlsx", { type: excel.type }));
+    cands.push(new File(["\ufeff" + armarCSV()], nombreBase() + ".csv", { type: "text/csv" }));
+    for (var i = 0; i < cands.length; i++){
+      try { if (navigator.canShare({ files: [cands[i]] })) return cands[i]; } catch (e) { }
+    }
+    return null;
+  }
+
+  // Plan B: baja el Excel (o CSV) y abre el chat de CHD con el mensaje
+  function descargarYAbrirChat(msg){
+    var excel = crearExcel();
+    if (excel) ofrecer(nombreBase() + ".xlsx", excel);
+    else ofrecer(nombreBase() + ".csv", "\ufeff" + armarCSV());
+    var url = "https://wa.me/" + WHATSAPP + "?text=" +
+              encodeURIComponent(msg + "\n\n📎 Te adjunto el archivo de la lista.");
     var w = window.open(url, "_blank");
     if (!w) location.href = url;
+    mensaje("Se descargó la lista. En el chat de WhatsApp tócale al clip 📎 y adjúntala.");
+  }
+
+  document.getElementById("enviarWsp").addEventListener("click", function(){
+    if (!validar()) return;
+    var msg = armarMensajeWsp();
+    var archivo = archivoParaCompartir();
+    if (!archivo){ descargarYAbrirChat(msg); return; }
+    mensaje("Elige WhatsApp y luego el chat de CHD Sport (923 354 970).");
+    navigator.share({ files: [archivo], text: msg }).catch(function(err){
+      if (err && err.name === "AbortError") return;   // lo cancelo el cliente
+      descargarYAbrirChat(msg);
+    });
   });
 
   // ---- Foto de referencia ----
