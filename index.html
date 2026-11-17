@@ -56,6 +56,9 @@
   @media (max-width:640px){ .fields,.fields2,.grid2,.fields2.cuatro,.fields2.cinco{grid-template-columns:1fr} }
   .btn{height:48px;padding:0 18px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:inherit;font-size:15px;font-weight:500;cursor:pointer}
   .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+  .btn.wsp{background:#1fa855;border-color:#1fa855;color:#fff;font-weight:600}
+  .total{font-size:15px;color:var(--ink);font-weight:600}
+  tr.tot td{font-weight:700;border-top:2px solid var(--ink)}
   .bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:12px 16px}
   .barin{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:12px}
   .count{flex-grow:1;font-size:13px;color:var(--muted)}
@@ -268,6 +271,8 @@
   <div class="card">
     <label>Resumen del pedido</label>
     <div class="scroll"><table id="resumen"></table></div>
+    <div class="hint">Precios por unidad para tallas 16 a XL. Tallas 2 a 14: S/ 2 menos. Tallas XXL o m&aacute;s: S/ 2 m&aacute;s.
+      El env&iacute;o por Shalom lo paga el cliente. CHD te confirma el total final por WhatsApp.</div>
   </div>
 
   <div class="pie">
@@ -283,6 +288,7 @@
     <button class="btn" id="descargarCsv">CSV</button>
     <button class="btn" id="descargarPdf">PDF</button>
     <button class="btn primary" id="descargar">Descargar Excel</button>
+    <button class="btn wsp" id="enviarWsp">Enviar por WhatsApp</button>
   </div>
 </div>
 
@@ -303,6 +309,11 @@
 
   var TALLAS = ["2","4","6","8","10","12","14","16","S","M","L","XL","XXL","XXXL","XXXXL"];
   var LETRAS = ["S","M","L","XL","XXL","XXXL","XXXXL"];
+  // ---- Precios (soles por unidad, tallas 16 a XL) y WhatsApp de CHD ----
+  var PRECIO = { CAMISETA: 32, CONJUNTO: 50, CONJUNTO_MEDIAS: 55 };
+  var AJUSTE_NINO = -2;     // tallas 2 a 14
+  var AJUSTE_GRANDE = 2;    // tallas XXL, XXXL, XXXXL
+  var WHATSAPP = "51923354970";
   var gruposEl = document.getElementById("grupos");
   var grupos = [];
   var proximoId = 1;
@@ -314,6 +325,7 @@
              prenda: base ? base.prenda : "CAMISETA",
              manga:  base ? base.manga  : "CORTA",
              abajo:  base ? base.abajo  : "SHORT",
+             medias: base ? (base.medias || "NO") : "NO",
              filas: [] };
   }
   function nuevaFila(){
@@ -381,7 +393,8 @@
   function aPlano(g, f){
     return { nombre: f.nombre, talla: f.talla, numero: f.numero, genero: g.genero,
              prenda: g.prenda, manga: g.manga, arquero: f.arquero, cantidad: f.cantidad,
-             tallaShort: f.tallaShort, abajo: g.abajo };
+             tallaShort: f.tallaShort, abajo: g.abajo,
+             medias: g.prenda === "CONJUNTO" && g.medias === "SI" };
   }
   function filaLlena(f){
     if (modo === "cantidades") return parseInt(f.cantidad, 10) > 0;
@@ -405,6 +418,21 @@
   function cuantas(d){
     if (modo === "cantidades") { var n = parseInt(d.cantidad, 10); return (n > 0) ? n : 0; }
     return 1;
+  }
+  // Precio de una prenda segun lo que lleva y su talla (la del polo)
+  function precioUnidad(d){
+    var p = d.prenda === "CONJUNTO" ? (d.medias ? PRECIO.CONJUNTO_MEDIAS : PRECIO.CONJUNTO) : PRECIO.CAMISETA;
+    var i = TALLAS.indexOf(d.talla);
+    if (i >= 0 && i < TALLAS.indexOf("16")) p += AJUSTE_NINO;
+    else if (i > TALLAS.indexOf("XL")) p += AJUSTE_GRANDE;
+    return p;
+  }
+  function totalSoles(L){
+    return L.reduce(function(s, d){ return s + precioUnidad(d) * cuantas(d); }, 0);
+  }
+  function nombrePrenda(d){
+    if (d.prenda !== "CONJUNTO") return "Camiseta";
+    return d.medias ? "Conjunto + medias" : "Conjunto";
   }
   function totalPrendas(L){
     return L.reduce(function(s, d){ return s + cuantas(d); }, 0);
@@ -430,6 +458,7 @@
     var t = (g.prenda === "CONJUNTO" ? "Conjunto" : "Camiseta") + " " +
             (g.genero === "VARON" ? "varón" : "dama") + " · manga " + g.manga.toLowerCase();
     if (esFaldaV(g)) t += " · con falda";
+    if (g.prenda === "CONJUNTO" && g.medias === "SI") t += " · con medias";
     return t;
   }
   function seg(campo, ops, valor, gid){
@@ -493,6 +522,8 @@
         seg("manga", [["CORTA","M. corta"],["LARGA","M. larga"]], g.manga, g.id) +
         (g.prenda === "CONJUNTO" && g.genero === "VARON"
           ? seg("abajo", [["SHORT","Short"],["FALDA","Falda"]], g.abajo || "SHORT", g.id) : "") +
+        (g.prenda === "CONJUNTO"
+          ? seg("medias", [["NO","Sin medias"],["SI","Con medias"]], g.medias || "NO", g.id) : "") +
       "</div>" +
       "<div class='fila cab" + (modo === "cantidades" ? " cant" : "") + "'><div></div>" +
         (modo === "cantidades" ? "<div>Talla</div><div>N°</div><div>Cant.</div>"
@@ -1303,6 +1334,19 @@
   });
 
   // ---- Resumen y avisos ----
+  // Agrupa por genero, prenda, talla y precio (para la tabla y el WhatsApp)
+  function resumenFilas(L){
+    var mapa = {}, orden = [];
+    L.forEach(function(d){
+      var k = d.genero + "|" + nombrePrenda(d) + "|" + tallaResumen(d) + "|" + precioUnidad(d);
+      if (!mapa[k]) { mapa[k] = { genero: d.genero, prenda: nombrePrenda(d), talla: tallaResumen(d),
+                                  precio: precioUnidad(d), cant: 0, idx: TALLAS.indexOf(d.talla) }; orden.push(k); }
+      mapa[k].cant += cuantas(d);
+    });
+    return orden.map(function(k){ return mapa[k]; }).sort(function(a, b){
+      return (a.genero + a.prenda).localeCompare(b.genero + b.prenda) || (a.idx - b.idx);
+    });
+  }
   function actualizarResumen(){
     var L = llenos();
     var tot = totalPrendas(L);
@@ -1310,21 +1354,20 @@
       ? tot + (tot === 1 ? " prenda" : " prendas")
       : L.length + (L.length === 1 ? " jugador" : " jugadores");
 
-    var mapa = {};
-    L.forEach(function(d){
-      var k = d.genero + "|" + d.prenda + "|" + tallaResumen(d);
-      mapa[k] = (mapa[k] || 0) + cuantas(d);
-    });
+    var soles = totalSoles(L);
+    if (tot > 0) document.getElementById("count").innerHTML =
+      esc(document.getElementById("count").textContent) + " · <span class='total'>Total S/ " + soles + "</span>";
 
-    var claves = Object.keys(mapa).sort();
-    var html = "<tr><th>Género</th><th>Prenda</th><th>Talla</th><th>Cantidad</th></tr>";
-    if (claves.length === 0){
-      html += "<tr><td colspan='4' style='color:var(--muted)'>" + (modo === "cantidades" ? "Aún no hay prendas" : "Aún no hay jugadores") + "</td></tr>";
+    var filasR = resumenFilas(L);
+    var html = "<tr><th>Género</th><th>Prenda</th><th>Talla</th><th>Cant.</th><th>P. unit.</th><th>Subtotal</th></tr>";
+    if (filasR.length === 0){
+      html += "<tr><td colspan='6' style='color:var(--muted)'>" + (modo === "cantidades" ? "Aún no hay prendas" : "Aún no hay jugadores") + "</td></tr>";
     } else {
-      claves.forEach(function(k){
-        var p = k.split("|");
-        html += "<tr><td>" + p[0] + "</td><td>" + p[1] + "</td><td>" + esc(p[2]) + "</td><td>" + mapa[k] + "</td></tr>";
+      filasR.forEach(function(r){
+        html += "<tr><td>" + r.genero + "</td><td>" + esc(r.prenda) + "</td><td>" + esc(r.talla) + "</td><td>" + r.cant +
+                "</td><td>S/ " + r.precio + "</td><td>S/ " + (r.precio * r.cant) + "</td></tr>";
       });
+      html += "<tr class='tot'><td colspan='3'>TOTAL</td><td>" + tot + "</td><td></td><td>S/ " + soles + "</td></tr>";
     }
     document.getElementById("resumen").innerHTML = html;
 
@@ -1860,6 +1903,53 @@
     }
 
     await ofrecer(nombreBase() + ".pdf", doc.output("blob"));
+  });
+
+  // ---- Enviar el pedido por WhatsApp a CHD ----
+  function armarMensajeWsp(){
+    var L = llenos(), dp = datosDelPedido();
+    var tot = totalPrendas(L), soles = totalSoles(L);
+    var m = [];
+    m.push("*PEDIDO CHD SPORT*");
+    m.push("Equipo: " + dp.equipo);
+    if (dp.contacto) m.push("Contacto: " + dp.contacto);
+    if (dp.telaCamiseta) m.push("Tela camiseta: " + dp.telaCamiseta);
+    if (dp.telaShort) m.push("Tela short: " + dp.telaShort);
+    m.push("");
+    m.push("*Resumen*");
+    resumenFilas(L).forEach(function(r){
+      m.push("• " + r.cant + " " + r.prenda + " " + (r.genero === "VARON" ? "varón" : "dama") +
+             " talla " + r.talla + " x S/ " + r.precio + " = S/ " + (r.precio * r.cant));
+    });
+    m.push("");
+    m.push("Total: " + tot + (tot === 1 ? " prenda" : " prendas") + " = *S/ " + soles + "*");
+    m.push("Adelanto 50%: S/ " + Math.ceil(soles / 2));
+    if (modo === "nombres"){
+      m.push("");
+      m.push("*Lista*");
+      var n = 0;
+      grupos.forEach(function(g){
+        var filas = g.filas.filter(filaLlena);
+        if (!filas.length) return;
+        m.push("_" + tituloGrupo(g) + "_");
+        filas.forEach(function(f){
+          n++;
+          var d = aPlano(g, f);
+          m.push(n + ". " + (f.nombre.trim() || "(sin nombre)") + " - " + (f.numero || "s/n") + " - " +
+                 tallaResumen(d) + (f.arquero ? " - ARQUERO" : ""));
+        });
+      });
+    }
+    m.push("");
+    m.push("(Precio referencial, CHD confirma el total. Envío por Shalom aparte.)");
+    return m.join("\n");
+  }
+
+  document.getElementById("enviarWsp").addEventListener("click", function(){
+    if (!validar()) return;
+    var url = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(armarMensajeWsp());
+    var w = window.open(url, "_blank");
+    if (!w) location.href = url;
   });
 
   // ---- Foto de referencia ----
